@@ -9,7 +9,7 @@
   "endOfLine": "lf",
   "overrides": [
     {
-      "files": ["*.json", "*.jsonc", ".prettierrc"],
+      "files": ["*.json", "*.jsonc", ".prettierrc", "*.yml", "*.yaml"],
       "options": { "useTabs": false }
     }
   ]
