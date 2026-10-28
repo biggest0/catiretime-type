@@ -31,8 +31,11 @@ export default defineConfig({
 			output: {
 				// Rarely-changing vendors in their own cacheable chunks: an app deploy
 				// doesn't invalidate them, and the browser fetches them in parallel.
+				// Entries are import paths, not packages: "react-dom/client" (the bulk
+				// of React DOM) must be listed besides "react-dom" or it lands in the
+				// app chunk.
 				manualChunks: {
-					react: ["react", "react-dom", "react-router-dom"],
+					react: ["react", "react-dom", "react-dom/client", "react-router-dom"],
 					redux: ["@reduxjs/toolkit", "react-redux"],
 					i18n: ["i18next", "react-i18next", "i18next-browser-languagedetector"],
 					baseui: ["@base-ui/react"],
