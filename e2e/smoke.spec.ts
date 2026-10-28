@@ -5,4 +5,5 @@ test('home page loads with the site title and a heading', async ({ page }) => {
 
 	await expect(page).toHaveTitle('Typing practice | Çatire Type');
 	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	await expect(page.getByText(/^v\d+\.\d+\.\d+$/)).toBeVisible();
 });

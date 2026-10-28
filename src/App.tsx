@@ -1,3 +1,5 @@
+import { APP_VERSION } from '@/config/config';
+
 /**
  * Temporary Phase 0 page: proves the fonts and colour tokens load in both
  * themes. Replaced by the real app shell in Phase 1.
@@ -17,6 +19,7 @@ export default function App() {
 			>
 				Toggle dark mode
 			</button>
+			<p className="mt-6 text-sm text-muted-foreground">{APP_VERSION}</p>
 		</main>
 	);
 }
