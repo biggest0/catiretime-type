@@ -1,0 +1,18 @@
+# Editor defaults for every editor (VS Code needs the EditorConfig extension).
+# Prettier enforces the same rules; see .prettierrc.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = tab
+indent_size = 2
+
+[{*.json,*.jsonc,.prettierrc}]
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

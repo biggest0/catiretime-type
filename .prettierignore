@@ -1,0 +1,3 @@
+# Prettier already skips everything in .gitignore. Also skip files that tools
+# write themselves.
+package-lock.json
