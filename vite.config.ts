@@ -20,6 +20,13 @@ export default defineConfig({
 		// fail loudly when the port is taken instead of silently moving to the next one
 		strictPort: true,
 	},
+	// `vite preview` (used by Playwright). Not Vite's default 4173, which other
+	// local apps use: Playwright reuses whatever server answers on its port.
+	preview: {
+		host: "localhost",
+		port: 4174,
+		strictPort: true,
+	},
 	resolve: {
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
