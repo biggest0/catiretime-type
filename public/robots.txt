@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+# Account, auth, stats and practice-run pages hold nothing to index.
+Disallow: /account
+Disallow: /stats
+Disallow: /login
+Disallow: /register
+Disallow: /reset-password
+Disallow: /auth/
+Disallow: /type/
