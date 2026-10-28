@@ -12,7 +12,7 @@ export default function App() {
 			<p className="mt-2 text-brand">The brand colour, used for links.</p>
 			<button
 				type="button"
-				onClick={() => document.documentElement.classList.toggle("dark")}
+				onClick={() => document.documentElement.classList.toggle('dark')}
 				className="mt-6 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary-hover"
 			>
 				Toggle dark mode

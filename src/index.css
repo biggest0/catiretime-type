@@ -1,14 +1,16 @@
-/* Self-hosted fonts: no render-blocking request to Google Fonts. The
-   unicode-range in each generated @font-face rule means browsers only
-   download the character subsets a page actually uses. */
-@import "@fontsource/tinos/400.css";
-@import "@fontsource/tinos/400-italic.css";
-@import "@fontsource/tinos/700.css";
-@import "@fontsource/cardo/400.css";
-@import "@fontsource/cardo/700.css";
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+/*
+ * Self-hosted fonts: no render-blocking request to Google Fonts. The
+ * unicode-range in each generated @font-face rule means browsers only
+ * download the character subsets a page actually uses.
+ */
+@import '@fontsource/tinos/400.css';
+@import '@fontsource/tinos/400-italic.css';
+@import '@fontsource/tinos/700.css';
+@import '@fontsource/cardo/400.css';
+@import '@fontsource/cardo/700.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 /* Class-based dark mode: AppSettingContext toggles the `dark` class on <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
@@ -27,53 +29,63 @@
  */
 :root {
 	/* typefaces */
-	--typeface-body: "Tinos", serif;
-	--typeface-heading: "Cardo", serif;
+	--typeface-body: 'Tinos', serif;
+	--typeface-heading: 'Cardo', serif;
 
 	/* surfaces */
-	--background: #ffffff;                        /* page background, footer, mobile menu panel */
-	--foreground: #1f2937;                        /* gray-800 | headings, titles, bold labels */
-	--card: #ffffff;                              /* cards, input fields, dropdowns */
+	--background: #ffffff; /* page background, footer, mobile menu panel */
+	--foreground: #1f2937; /* gray-800 | headings, titles, bold labels */
+	--card: #ffffff; /* cards, input fields, dropdowns */
 	--card-foreground: #1f2937;
-	--popover: #ffffff;                           /* floating panels (menus, popovers) */
+	--popover: #ffffff; /* floating panels (menus, popovers) */
 	--popover-foreground: #1f2937;
-	--background-glass: rgba(255, 255, 255, 0.8); /* the page background made translucent (sticky header); must track --background exactly, or the bar reads as a different colour */
-	--elevated-glass: rgba(255, 255, 255, 0.8);  /* a surface floating above the page; at 50% the content scrolling underneath stayed legible through it */
+	--background-glass: rgba(
+		255,
+		255,
+		255,
+		0.8
+	); /* the page background made translucent (sticky header); must track --background exactly, or the bar reads as a different colour */
+	--elevated-glass: rgba(
+		255,
+		255,
+		255,
+		0.8
+	); /* a surface floating above the page; at 50% the content scrolling underneath stayed legible through it */
 
 	/* text ramp (foreground = headings; secondary = body; muted-foreground = captions) */
-	--foreground-secondary: #4b5563;              /* gray-600 | body text, form inputs, nav links */
-	--muted-foreground: #6b7280;                  /* gray-500 | dates, captions, metadata, icons */
-	--section-label: #92400e;                     /* amber-800 | section labels and page titles; deliberately not --brand, which reads as "interactive" */
-	--disabled: #d1d5db;                          /* gray-300 | disabled text and input borders */
-	--placeholder: #9ca3af;                       /* gray-400 | input placeholder text */
+	--foreground-secondary: #4b5563; /* gray-600 | body text, form inputs, nav links */
+	--muted-foreground: #6b7280; /* gray-500 | dates, captions, metadata, icons */
+	--section-label: #92400e; /* amber-800 | section labels and page titles; deliberately not --brand, which reads as "interactive" */
+	--disabled: #d1d5db; /* gray-300 | disabled text and input borders */
+	--placeholder: #9ca3af; /* gray-400 | input placeholder text */
 
 	/* brand amber */
-	--brand: #b45309;                             /* amber-700 | interactive text and links (4.9:1 on white, WCAG AA) */
-	--primary: #f59e0b;                           /* amber-500 | button fills */
-	--primary-hover: #b45309;                     /* amber-700 | hover on button fills */
-	--primary-foreground: #ffffff;                /* text on amber fills */
-	--accent: #fef3c7;                            /* amber-100 | hover tints, selected-state backgrounds */
-	--accent-foreground: #92400e;                 /* amber-800 | text on the tint */
+	--brand: #b45309; /* amber-700 | interactive text and links (4.9:1 on white, WCAG AA) */
+	--primary: #f59e0b; /* amber-500 | button fills */
+	--primary-hover: #b45309; /* amber-700 | hover on button fills */
+	--primary-foreground: #ffffff; /* text on amber fills */
+	--accent: #fef3c7; /* amber-100 | hover tints, selected-state backgrounds */
+	--accent-foreground: #92400e; /* amber-800 | text on the tint */
 
 	/* neutrals */
-	--muted: #f3f4f6;                             /* gray-100 | neutral hover backgrounds */
-	--secondary: #f3f4f6;                         /* secondary-button surface (= muted) */
+	--muted: #f3f4f6; /* gray-100 | neutral hover backgrounds */
+	--secondary: #f3f4f6; /* secondary-button surface (= muted) */
 	--secondary-foreground: #1f2937;
-	--control-active: #ffffff;                    /* selected toggle/chip on top of bg-muted */
-	--disabled-bg: #9ca3af;                       /* gray-400 | disabled fill on accent buttons */
+	--control-active: #ffffff; /* selected toggle/chip on top of bg-muted */
+	--disabled-bg: #9ca3af; /* gray-400 | disabled fill on accent buttons */
 
 	/* borders */
-	--border: #9ca3af;                            /* gray-400 | standard dividers */
-	--border-subtle: #e5e7eb;                     /* gray-200 | light dividers (sections, nav, footer) */
-	--input: #d1d5db;                             /* gray-300 | form-control borders */
-	--ring: #f59e0b;                              /* amber-500 | focus rings */
+	--border: #9ca3af; /* gray-400 | standard dividers */
+	--border-subtle: #e5e7eb; /* gray-200 | light dividers (sections, nav, footer) */
+	--input: #d1d5db; /* gray-300 | form-control borders */
+	--ring: #f59e0b; /* amber-500 | focus rings */
 
 	/* status */
-	--destructive: #dc2626;                       /* red-600 | errors */
-	--success: #16a34a;                           /* green-600 | success messages */
-	--warning: #a16207;                           /* yellow-700 | warning text */
-	--warning-subtle: #fef9c3;                    /* yellow-100 | warning surface */
-	--warning-border: #eab308;                    /* yellow-500 | warning border */
+	--destructive: #dc2626; /* red-600 | errors */
+	--success: #16a34a; /* green-600 | success messages */
+	--warning: #a16207; /* yellow-700 | warning text */
+	--warning-subtle: #fef9c3; /* yellow-100 | warning surface */
+	--warning-border: #eab308; /* yellow-500 | warning border */
 }
 
 /* Dark mode: same variable names, dark values. Components need no changes. */
@@ -81,49 +93,59 @@
 	color-scheme: dark;
 
 	/* surfaces */
-	--background: #0f172a;                        /* slate-900 */
-	--foreground: #f1f5f9;                        /* slate-100 */
-	--card: #1e293b;                              /* slate-800 */
+	--background: #0f172a; /* slate-900 */
+	--foreground: #f1f5f9; /* slate-100 */
+	--card: #1e293b; /* slate-800 */
 	--card-foreground: #f1f5f9;
 	--popover: #1e293b;
 	--popover-foreground: #f1f5f9;
-	--background-glass: rgba(15, 23, 42, 0.8);   /* = --background at 80%; a lighter value showed the sticky header as a band */
-	--elevated-glass: rgba(30, 41, 59, 0.8);     /* slate-800 at 80%: lighter than the page on purpose, so floating elements read as raised */
+	--background-glass: rgba(
+		15,
+		23,
+		42,
+		0.8
+	); /* = --background at 80%; a lighter value showed the sticky header as a band */
+	--elevated-glass: rgba(
+		30,
+		41,
+		59,
+		0.8
+	); /* slate-800 at 80%: lighter than the page on purpose, so floating elements read as raised */
 
 	/* text ramp */
-	--foreground-secondary: #cbd5e1;              /* slate-300 */
-	--muted-foreground: #94a3b8;                  /* slate-400 */
-	--section-label: #f59e0b;                     /* amber-500, a step off --brand so labels and links stay distinguishable */
-	--disabled: #475569;                          /* slate-600 */
-	--placeholder: #64748b;                       /* slate-500 */
+	--foreground-secondary: #cbd5e1; /* slate-300 */
+	--muted-foreground: #94a3b8; /* slate-400 */
+	--section-label: #f59e0b; /* amber-500, a step off --brand so labels and links stay distinguishable */
+	--disabled: #475569; /* slate-600 */
+	--placeholder: #64748b; /* slate-500 */
 
 	/* brand amber */
-	--brand: #fbbf24;                             /* amber-400 */
-	--primary: #d97706;                           /* amber-600 */
-	--primary-hover: #f59e0b;                     /* amber-500 */
+	--brand: #fbbf24; /* amber-400 */
+	--primary: #d97706; /* amber-600 */
+	--primary-hover: #f59e0b; /* amber-500 */
 	--primary-foreground: #ffffff;
-	--accent: rgba(120, 53, 15, 0.4);             /* amber-900 at 40% */
-	--accent-foreground: #fbbf24;                 /* amber-400 */
+	--accent: rgba(120, 53, 15, 0.4); /* amber-900 at 40% */
+	--accent-foreground: #fbbf24; /* amber-400 */
 
 	/* neutrals */
-	--muted: #334155;                             /* slate-700 */
+	--muted: #334155; /* slate-700 */
 	--secondary: #334155;
 	--secondary-foreground: #f1f5f9;
-	--control-active: #475569;                    /* slate-600 */
-	--disabled-bg: #475569;                       /* slate-600 */
+	--control-active: #475569; /* slate-600 */
+	--disabled-bg: #475569; /* slate-600 */
 
 	/* borders */
-	--border: #475569;                            /* slate-600 */
-	--border-subtle: #334155;                     /* slate-700 */
-	--input: #475569;                             /* slate-600 */
-	--ring: #d97706;                              /* amber-600 */
+	--border: #475569; /* slate-600 */
+	--border-subtle: #334155; /* slate-700 */
+	--input: #475569; /* slate-600 */
+	--ring: #d97706; /* amber-600 */
 
 	/* status */
-	--destructive: #f87171;                       /* red-400 */
-	--success: #4ade80;                           /* green-400 */
-	--warning: #facc15;                           /* yellow-400 */
-	--warning-subtle: rgba(113, 63, 18, 0.3);     /* yellow-900 at 30% */
-	--warning-border: #ca8a04;                    /* yellow-600 */
+	--destructive: #f87171; /* red-400 */
+	--success: #4ade80; /* green-400 */
+	--warning: #facc15; /* yellow-400 */
+	--warning-subtle: rgba(113, 63, 18, 0.3); /* yellow-900 at 30% */
+	--warning-border: #ca8a04; /* yellow-600 */
 }
 
 /*
@@ -185,7 +207,9 @@
 		color: var(--foreground-secondary);
 		line-height: 1.5;
 		background-color: var(--background);
-		transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+		transition:
+			background-color 0.2s ease-in-out,
+			color 0.2s ease-in-out;
 	}
 
 	h1,

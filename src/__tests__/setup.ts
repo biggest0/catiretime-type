@@ -9,9 +9,9 @@
  *   reads it to resolve the "system" theme, so without this every test that
  *   mounts the provider dies with "window.matchMedia is not a function".
  */
-import "@testing-library/jest-dom/vitest";
-import { cleanup } from "@testing-library/react";
-import { afterEach, vi } from "vitest";
+import '@testing-library/jest-dom/vitest';
+import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
 
 /**
  * Minimal MediaQueryList: reports "no match" and accepts listeners without

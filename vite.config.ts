@@ -1,9 +1,9 @@
 /// <reference types="vitest/config" />
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import tailwindcss from "@tailwindcss/vite";
-import { fileURLToPath } from "node:url";
-import pkg from "./package.json" with { type: "json" };
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import { fileURLToPath } from 'node:url';
+import pkg from './package.json' with { type: 'json' };
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -11,11 +11,11 @@ export default defineConfig({
 	// origin; both are injected at build time and read back in src/config/config.ts.
 	define: {
 		__APP_VERSION__: JSON.stringify(pkg.version),
-		__SITE_URL__: JSON.stringify(pkg.homepage.replace(/\/$/, "")),
+		__SITE_URL__: JSON.stringify(pkg.homepage.replace(/\/$/, '')),
 	},
 	plugins: [react(), tailwindcss()],
 	server: {
-		host: "localhost",
+		host: 'localhost',
 		port: 5173,
 		// fail loudly when the port is taken instead of silently moving to the next one
 		strictPort: true,
@@ -23,16 +23,16 @@ export default defineConfig({
 	// `vite preview` (used by Playwright). Not Vite's default 4173, which other
 	// local apps use: Playwright reuses whatever server answers on its port.
 	preview: {
-		host: "localhost",
+		host: 'localhost',
 		port: 4174,
 		strictPort: true,
 	},
 	resolve: {
 		alias: {
-			"@": fileURLToPath(new URL("./src", import.meta.url)),
+			'@': fileURLToPath(new URL('./src', import.meta.url)),
 		},
 	},
-	base: "/",
+	base: '/',
 	build: {
 		rollupOptions: {
 			output: {
@@ -42,17 +42,21 @@ export default defineConfig({
 				// of React DOM) must be listed besides "react-dom" or it lands in the
 				// app chunk.
 				manualChunks: {
-					react: ["react", "react-dom", "react-dom/client", "react-router-dom"],
-					redux: ["@reduxjs/toolkit", "react-redux"],
-					i18n: ["i18next", "react-i18next", "i18next-browser-languagedetector"],
-					baseui: ["@base-ui/react"],
+					react: ['react', 'react-dom', 'react-dom/client', 'react-router-dom'],
+					redux: ['@reduxjs/toolkit', 'react-redux'],
+					i18n: [
+						'i18next',
+						'react-i18next',
+						'i18next-browser-languagedetector',
+					],
+					baseui: ['@base-ui/react'],
 				},
 			},
 		},
 	},
 	test: {
-		environment: "jsdom",
-		include: ["src/__tests__/**/*.test.{ts,tsx}"],
-		setupFiles: ["src/__tests__/setup.ts"],
+		environment: 'jsdom',
+		include: ['src/__tests__/**/*.test.{ts,tsx}'],
+		setupFiles: ['src/__tests__/setup.ts'],
 	},
 });

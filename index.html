@@ -1,36 +1,53 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Icons. The 48px PNG exists because Google Search only shows favicons
-         whose size is a multiple of 48px; browsers keep using the 32px one. -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/app_icon.png" />
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a" />
-    <!-- Warm up the API origin. API calls send cookies, so warm the credentialed
-         connection pool: a plain (anonymous) crossorigin hint opens a connection
-         those calls can't reuse. Vite fills the placeholder from VITE_API_URL. -->
-    <link rel="preconnect" href="%VITE_API_URL%" crossorigin="use-credentials" />
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<!-- Icons. The 48px PNG exists because Google Search only shows favicons
+			whose size is a multiple of 48px; browsers keep using the 32px one. -->
+		<link rel="icon" type="image/png" sizes="32x32" href="/app_icon.png" />
+		<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: light)"
+			content="#ffffff"
+		/>
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: dark)"
+			content="#0f172a"
+		/>
+		<!-- Warm up the API origin. API calls send cookies, so warm the credentialed
+			connection pool: a plain (anonymous) crossorigin hint opens a connection
+			those calls can't reuse. Vite fills the placeholder from VITE_API_URL. -->
+		<link
+			rel="preconnect"
+			href="%VITE_API_URL%"
+			crossorigin="use-credentials"
+		/>
 
-    <!-- Site-wide defaults (= the home page); PageMeta updates them per route.
-         Keep each tag on ONE line in case a prerender step is ever added. -->
-    <title>Typing practice | Çatire Type</title>
-    <meta name="description" content="Typing practice with satirical news, classic literature, poems and quotes, in English and French." />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <link rel="canonical" href="https://type.catiretime.com/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Çatire Type" />
-    <meta property="og:locale" content="en_CA" />
-    <meta property="og:locale:alternate" content="fr_CA" />
-    <meta property="og:title" content="Typing practice | Çatire Type" />
-    <meta property="og:description" content="Typing practice with satirical news, classic literature, poems and quotes, in English and French." />
-    <meta property="og:url" content="https://type.catiretime.com/" />
-    <meta name="twitter:card" content="summary" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+		<!-- Site-wide defaults (= the home page); PageMeta updates them per route. -->
+		<title>Typing practice | Çatire Type</title>
+		<meta
+			name="description"
+			content="Typing practice with satirical news, classic literature, poems and quotes, in English and French."
+		/>
+		<meta name="robots" content="index, follow, max-image-preview:large" />
+		<link rel="canonical" href="https://type.catiretime.com/" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="Çatire Type" />
+		<meta property="og:locale" content="en_CA" />
+		<meta property="og:locale:alternate" content="fr_CA" />
+		<meta property="og:title" content="Typing practice | Çatire Type" />
+		<meta
+			property="og:description"
+			content="Typing practice with satirical news, classic literature, poems and quotes, in English and French."
+		/>
+		<meta property="og:url" content="https://type.catiretime.com/" />
+		<meta name="twitter:card" content="summary" />
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
 </html>
