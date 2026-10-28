@@ -26,6 +26,7 @@ lerna-debug.log*
 /CLAUDE.md
 /.mcp.json
 /.claude/
+/.playwright-mcp/
 
 # Editor directories and files
 .vscode/*
