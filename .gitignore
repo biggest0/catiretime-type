@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+
+# Build outputs
+dist
+dist-ssr
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables: real values stay local, the template is committed
+.env*
+!.env.example
+
+# Local dev files
+*.local
+
+# Local only: planning docs and AI tooling never leave this machine
+/docs/
+/CLAUDE.md
+/.mcp.json
+/.claude/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# OS files
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
