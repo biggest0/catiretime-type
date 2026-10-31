@@ -5,8 +5,12 @@ import { initReactI18next } from 'react-i18next';
 import { UI_LANGUAGE } from '@/constants/keys';
 import enCommon from '@/i18n/en/common.json';
 import frCommon from '@/i18n/fr/common.json';
+import { LANGUAGES } from '@/i18n/languages';
 
-/** Every translation, by language, then namespace. The app has one: `common`. */
+/**
+ * Every translation, by language, then namespace. The app has one: `common`.
+ * One entry per language in `LANGUAGES`.
+ */
 const resources = {
 	en: { common: enCommon },
 	fr: { common: frCommon },
@@ -29,7 +33,7 @@ i18n
 	.use(initReactI18next)
 	.init({
 		resources,
-		supportedLngs: ['en', 'fr'],
+		supportedLngs: LANGUAGES.map(({ code }) => code),
 		// a key missing in French, or a language the app doesn't support,
 		// shows the English text
 		fallbackLng: 'en',

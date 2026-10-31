@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { UI_LANGUAGE } from '@/constants/keys';
 import i18n from '@/i18n/config';
+import { LANGUAGES } from '@/i18n/languages';
 
 describe('i18n config', () => {
 	afterEach(async () => {
@@ -46,6 +47,12 @@ describe('i18n config', () => {
 
 		expect(i18n.resolvedLanguage).toBe('en');
 		expect(i18n.t('COMMON.CLOSE')).toBe('Close');
+	});
+
+	it('loads a translation file for every language in LANGUAGES', () => {
+		expect(Object.keys(i18n.options.resources ?? {})).toEqual(
+			LANGUAGES.map(({ code }) => code)
+		);
 	});
 
 	it('rejects unknown keys at compile time', () => {
