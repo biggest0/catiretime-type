@@ -47,8 +47,8 @@ const baseQueryWithReauth: BaseQueryFn<
  * and one middleware.
  */
 export const apiSlice = createApi({
-	reducerPath: 'api',
-	baseQuery: baseQueryWithReauth,
+	reducerPath: 'api', // the store key for the reducer
+	baseQuery: baseQueryWithReauth, // the function that sends requests and handles 401s
 	// names for cached data that a change can mark stale; each app adds its own
 	tagTypes: [],
 	endpoints: () => ({}),
