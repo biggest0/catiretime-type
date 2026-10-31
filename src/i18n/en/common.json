@@ -1,10 +1,7 @@
 {
   "COMMON": {
-    "LOAD": "Loading",
     "LOADING": "Loading...",
     "LANGUAGE": "Language",
-    "LOAD_ERROR": "Couldn't load this section.",
-    "RETRY": "Try again",
     "CLOSE": "Close",
     "PAGE_ERROR": "This page didn't load.",
     "RELOAD": "Reload"
