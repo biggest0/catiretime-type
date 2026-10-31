@@ -6,6 +6,9 @@
     "PAGE_ERROR": "This page didn't load.",
     "RELOAD": "Reload"
   },
+  "NAVIGATION": {
+    "HOME": "Home"
+  },
   "THEME": {
     "LIGHT": "Light",
     "DARK": "Dark",

@@ -6,6 +6,9 @@
     "PAGE_ERROR": "Cette page ne s'est pas chargée.",
     "RELOAD": "Recharger"
   },
+  "NAVIGATION": {
+    "HOME": "Accueil"
+  },
   "THEME": {
     "LIGHT": "Clair",
     "DARK": "Sombre",
