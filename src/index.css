@@ -16,7 +16,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Design tokens: the single source of truth for every font and colour.
+ * Design tokens: the single source of truth for every font, colour and
+ * corner radius.
  *
  *   1. Plain CSS variables hold the values: light in :root, dark in .dark.
  *   2. @theme inline maps them to Tailwind utilities
@@ -31,6 +32,11 @@
 	/* typefaces */
 	--typeface-body: 'Tinos', serif;
 	--typeface-heading: 'Cardo', serif;
+
+	/* corner radius: rounded-sm … rounded-4xl are all derived from it (see
+	   @theme inline), so this one value rounds or squares every corner.
+	   0rem keeps the square newspaper look; the same in both themes */
+	--radius: 0rem;
 
 	/* surfaces */
 	--background: #ffffff; /* page background, footer, mobile menu panel */
@@ -157,6 +163,17 @@
 	/* typography: font-body, font-heading */
 	--font-body: var(--typeface-body);
 	--font-heading: var(--typeface-heading);
+
+	/* corner radius: shadcn's scale, each size a multiple of --radius.
+	   Plain `rounded` and `rounded-xs` keep Tailwind's fixed sizes, so
+	   components use rounded-sm … rounded-4xl (or rounded-full for circles) */
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
 
 	/* shadcn-native colour tokens */
 	--color-background: var(--background);
