@@ -1,11 +1,16 @@
 import { expect, test, type Page } from '@playwright/test';
 
 import { APP_SETTING } from '../src/constants/keys';
+import { stubAnonymousVisitor } from './support/stubApi';
 
 // The theme script in index.html must show the saved theme before the app's
 // JavaScript runs. The first three tests block that JavaScript, so only the
 // script can pass them. They use the app's own storage key: if keys.ts and
 // the script stop agreeing, the saved theme is missed and they fail.
+
+test.beforeEach(async ({ page }) => {
+	await stubAnonymousVisitor(page);
+});
 
 /**
  * Saves a theme the way the app does, before the page loads.
