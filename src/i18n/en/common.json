@@ -18,5 +18,10 @@
   },
   "ACCOUNT": {
     "ACCOUNT_LABEL": "Account"
+  },
+  "SEO": {
+    "HOME": {
+      "DESCRIPTION": "Typing practice with satirical news, classic literature, poems and quotes, in English and French."
+    }
   }
 }

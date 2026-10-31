@@ -64,7 +64,10 @@
 			crossorigin="use-credentials"
 		/>
 
-		<!-- Site-wide defaults (= the home page); PageMeta updates them per route. -->
+		<!-- Site-wide defaults (= the home page); PageMeta updates them per route.
+			The description repeats SEO.HOME.DESCRIPTION in src/i18n/en/common.json:
+			change both (PageMeta.test.tsx checks they match). -->
+
 		<title>Typing practice | Çatire Type</title>
 		<meta
 			name="description"

@@ -18,5 +18,10 @@
   },
   "ACCOUNT": {
     "ACCOUNT_LABEL": "Compte"
+  },
+  "SEO": {
+    "HOME": {
+      "DESCRIPTION": "Entraînez-vous à taper au clavier avec des nouvelles satiriques, de la littérature classique, des poèmes et des citations, en anglais et en français."
+    }
   }
 }
