@@ -15,12 +15,11 @@
     "SYSTEM": "System",
     "SWITCH_TO": "Switch to {{mode}} mode"
   },
-  "LANGUAGE": {
-    "EN": "English",
-    "FR": "French"
-  },
   "ACCOUNT": {
     "ACCOUNT_LABEL": "Account"
+  },
+  "AUTH": {
+    "LOGIN": "Log In"
   },
   "SEO": {
     "HOME": {

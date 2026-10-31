@@ -5,13 +5,17 @@ import { describe, expect, it } from 'vitest';
 // the real English strings for the labels
 import '@/i18n/config';
 import { Header } from '@/components/layout/header/Header';
+import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 describe('Header', () => {
 	it("is the page's banner, with one navigation area: the section links", () => {
+		// the theme toggle in the header needs the settings provider
 		render(
-			<MemoryRouter>
-				<Header />
-			</MemoryRouter>
+			<AppSettingProvider>
+				<MemoryRouter>
+					<Header />
+				</MemoryRouter>
+			</AppSettingProvider>
 		);
 
 		const banner = screen.getByRole('banner');
