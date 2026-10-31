@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/Button';
 import { APP_VERSION } from '@/config/config';
 import { useAppSettings } from '@/hooks/useAppSettings';
 
@@ -16,13 +17,9 @@ export default function App() {
 			<p className="mt-2">Body text in Tinos, the secondary text colour.</p>
 			<p className="mt-2 text-sm text-muted-foreground">A muted caption.</p>
 			<p className="mt-2 text-brand">The brand colour, used for links.</p>
-			<button
-				type="button"
-				onClick={toggleDarkMode}
-				className="mt-6 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary-hover"
-			>
+			<Button onClick={toggleDarkMode} className="mt-6">
 				Toggle dark mode
-			</button>
+			</Button>
 			<p className="mt-6 text-sm text-muted-foreground">{APP_VERSION}</p>
 		</main>
 	);
