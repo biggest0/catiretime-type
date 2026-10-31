@@ -1,10 +1,14 @@
 import { APP_VERSION } from '@/config/config';
+import { useAppSettings } from '@/hooks/useAppSettings';
 
 /**
  * Temporary Phase 0 page: proves the fonts and colour tokens load in both
- * themes. Replaced by the real app shell in Phase 1.
+ * themes. Its button switches the saved theme. Replaced by the real app
+ * shell later in Phase 1.
  */
 export default function App() {
+	const { toggleDarkMode } = useAppSettings();
+
 	return (
 		<main className="mx-auto w-full max-w-[1280px] px-4 py-16">
 			<h1 className="text-4xl text-section-label">Çatire Type</h1>
@@ -14,7 +18,7 @@ export default function App() {
 			<p className="mt-2 text-brand">The brand colour, used for links.</p>
 			<button
 				type="button"
-				onClick={() => document.documentElement.classList.toggle('dark')}
+				onClick={toggleDarkMode}
 				className="mt-6 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary-hover"
 			>
 				Toggle dark mode
