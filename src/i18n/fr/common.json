@@ -7,7 +7,9 @@
     "RELOAD": "Recharger"
   },
   "NAVIGATION": {
-    "HOME": "Accueil"
+    "HOME": "Accueil",
+    "TOGGLE_MENU": "Ouvrir le menu",
+    "MENU_LABEL": "Menu de navigation"
   },
   "THEME": {
     "LIGHT": "Clair",

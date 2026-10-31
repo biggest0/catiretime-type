@@ -15,8 +15,9 @@ vi.mock('@/hooks/useAuth');
  * Renders the icon for a signed-in or signed-out visitor.
  *
  * @param isAuthenticated - Whether the visitor is signed in.
+ * @param variant - Which version to render (the icon by default).
  */
-function renderAs(isAuthenticated: boolean) {
+function renderAs(isAuthenticated: boolean, variant?: 'icon' | 'full') {
 	vi.mocked(useAuth).mockReturnValue({
 		user: isAuthenticated ? { id: '1', email: 'reader@example.com' } : null,
 		isAuthenticated,
@@ -28,7 +29,7 @@ function renderAs(isAuthenticated: boolean) {
 	});
 	render(
 		<MemoryRouter>
-			<UserAccountIcon />
+			<UserAccountIcon variant={variant} />
 		</MemoryRouter>
 	);
 }
@@ -41,6 +42,14 @@ describe('UserAccountIcon', () => {
 			'href',
 			PAGE_ROUTES.LOGIN
 		);
+	});
+
+	it('is a text link in its full version, for the mobile menu', () => {
+		renderAs(true, 'full');
+
+		const link = screen.getByRole('link', { name: 'Account' });
+		expect(link).toHaveTextContent('Account');
+		expect(link).toHaveAttribute('href', PAGE_ROUTES.ACCOUNT);
 	});
 
 	it('links a signed-in visitor to the account page', () => {

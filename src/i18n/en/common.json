@@ -7,7 +7,9 @@
     "RELOAD": "Reload"
   },
   "NAVIGATION": {
-    "HOME": "Home"
+    "HOME": "Home",
+    "TOGGLE_MENU": "Toggle menu",
+    "MENU_LABEL": "Navigation menu"
   },
   "THEME": {
     "LIGHT": "Light",
