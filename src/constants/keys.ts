@@ -4,7 +4,10 @@
 /** The signed-in user, saved at login so a reload knows who was signed in. */
 export const AUTH_USER = 'auth_user';
 
-/** Display settings such as the theme (`AppSetting`). */
+/**
+ * Display settings such as the theme (`AppSetting`). The theme script in
+ * index.html repeats this value.
+ */
 export const APP_SETTING = 'appSetting';
 
 /**

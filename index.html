@@ -17,6 +17,44 @@
 			media="(prefers-color-scheme: dark)"
 			content="#0f172a"
 		/>
+		<!-- Theme for the first paint. React applies the saved theme only once the
+			app's JavaScript has loaded, so without this a visitor who chose dark
+			sees the light page first. It repeats what the app does: keep the key
+			(APP_SETTING) and the default ('system') in step with
+			src/utils/storage/localStorageUtils.ts, and the rest with applyTheme()
+			in src/contexts/AppSettingProvider.tsx. e2e/theme.spec.ts checks it. -->
+		<script>
+			{
+				let mode = 'system';
+				try {
+					const saved = JSON.parse(
+						localStorage.getItem('appSetting')
+					)?.themeMode;
+					if (saved === 'light' || saved === 'dark') mode = saved;
+				} catch {
+					// corrupt or blocked storage: keep the default, as the app does
+				}
+
+				const dark =
+					mode === 'dark' ||
+					(mode === 'system' &&
+						matchMedia('(prefers-color-scheme: dark)').matches);
+				
+				// refers to html element, either adding or removing 'dark' class name
+				document.documentElement.classList.toggle('dark', dark);
+
+				// the browser bar: both tags take the colour of the theme shown
+				const scheme = dark ? 'dark' : 'light';
+				const color = document.querySelector(
+					`meta[name="theme-color"][media*="${scheme}"]`
+				)?.content;
+				if (color) {
+					document
+						.querySelectorAll('meta[name="theme-color"]')
+						.forEach((meta) => (meta.content = color));
+				}
+			}
+		</script>
 		<!-- Warm up the API origin. API calls send cookies, so warm the credentialed
 			connection pool: a plain (anonymous) crossorigin hint opens a connection
 			those calls can't reuse. Vite fills the placeholder from VITE_API_URL. -->
