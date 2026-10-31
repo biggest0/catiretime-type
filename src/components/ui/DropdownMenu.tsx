@@ -10,7 +10,9 @@ import { cn } from '@/lib/utils';
  * focus management and ARIA roles come with it. From the shadcn registry
  * (base-sera), adapted like Çatire Time's: react-icons instead of lucide, and
  * the panel and plain items restyled to the app's tokens (normal case,
- * text-sm). Corners use the radius scale, so they follow --radius.
+ * text-sm). Radio items share the plain items' look; checkbox items and
+ * submenu triggers still have upstream's (capitals, text-xs), since nothing
+ * uses them yet. Corners use the radius scale, so they follow --radius.
  */
 
 /**
@@ -294,7 +296,9 @@ function DropdownMenuRadioGroup({ ...props }: MenuPrimitive.RadioGroup.Props) {
 }
 
 /**
- * One option of a radio group, with a tick when chosen.
+ * One option of a radio group, with a tick on the right when chosen. Styled
+ * like `DropdownMenuItem`; screen readers hear it as checked or not. It stays
+ * open when clicked unless given `closeOnClick`.
  *
  * @param props.inset - Indent it to line up with items that have an icon.
  * @param props.children - Its text.
@@ -314,13 +318,13 @@ function DropdownMenuRadioItem({
 			data-slot="dropdown-menu-radio-item"
 			data-inset={inset}
 			className={cn(
-				"relative flex cursor-default items-center gap-2.5 rounded-md py-2 pr-8 pl-3 text-xs font-medium tracking-wider uppercase outline-hidden select-none focus:bg-accent focus:text-accent-foreground focus:**:text-accent-foreground data-inset:pl-9.5 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+				"relative flex cursor-pointer items-center gap-2 py-2 pr-10 pl-4 text-sm text-foreground-secondary outline-hidden select-none focus:bg-muted focus:text-foreground data-inset:pl-9.5 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 				className
 			)}
 			{...props}
 		>
 			<span
-				className="pointer-events-none absolute right-2 flex items-center justify-center"
+				className="pointer-events-none absolute right-4 flex items-center justify-center"
 				data-slot="dropdown-menu-radio-item-indicator"
 			>
 				<MenuPrimitive.RadioItemIndicator>
