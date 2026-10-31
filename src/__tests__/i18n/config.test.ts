@@ -33,6 +33,14 @@ describe('i18n config', () => {
 		expect(i18n.resolvedLanguage).toBe('fr');
 	});
 
+	it('keeps <html lang> in step with the language', async () => {
+		await i18n.changeLanguage('fr');
+		expect(document.documentElement.lang).toBe('fr');
+
+		await i18n.changeLanguage('en');
+		expect(document.documentElement.lang).toBe('en');
+	});
+
 	it('falls back to English for a language the app does not support', async () => {
 		await i18n.changeLanguage('de');
 

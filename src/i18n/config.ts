@@ -12,6 +12,13 @@ const resources = {
 	fr: { common: frCommon },
 } as const;
 
+// Keep <html lang> in step with the UI language: screen readers pick their
+// pronunciation from it. Listening before init() also catches the first
+// language, which init() sets right away.
+i18n.on('languageChanged', (language) => {
+	document.documentElement.lang = language;
+});
+
 /**
  * The app's single i18next instance. Importing this module initialises it,
  * so import it once, at startup. Components read translations through
