@@ -16,6 +16,14 @@ export const APP_SETTING = 'appSetting';
  */
 export const UI_LANGUAGE = 'i18nextLng';
 
+// sessionStorage keys: one value per tab, cleared when the tab closes.
+
+/**
+ * When this tab last reloaded itself to replace page files a deploy removed
+ * (`RouteErrorBoundary`), so it never reloads in a loop.
+ */
+export const ROUTE_RELOAD_ATTEMPTED = 'routeReloadAttempted';
+
 // Cookies
 
 /**

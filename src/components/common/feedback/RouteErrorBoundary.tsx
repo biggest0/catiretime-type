@@ -1,0 +1,124 @@
+import { Component, type ErrorInfo, type ReactNode } from 'react';
+
+import { RouteErrorFallback } from '@/components/common/feedback/RouteErrorFallback';
+import { ROUTE_RELOAD_ATTEMPTED } from '@/constants/keys';
+
+/**
+ * How long after an automatic reload another one is allowed, in ms. A file
+ * that is really missing fails again within seconds of the reload, so it
+ * can't loop; a later deploy in the same tab comes long after.
+ */
+const RELOAD_COOLDOWN_MS = 60_000;
+
+/**
+ * Tells whether an error means "the page file this tab asked for is no
+ * longer on the server". Browsers word it differently: Chrome says "Failed
+ * to fetch dynamically imported module", Safari "Importing a module script
+ * failed", Firefox "error loading dynamically imported module".
+ *
+ * @param error - What was thrown.
+ * @returns `true` for a missing page file.
+ */
+function isStaleChunkError(error: unknown): boolean {
+	const message = error instanceof Error ? error.message : String(error);
+	return /dynamically imported module|Importing a module script failed|ChunkLoadError/i.test(
+		message
+	);
+}
+
+/**
+ * Reads when this tab last reloaded for a missing page file.
+ *
+ * @returns The time in ms since 1970, `0` if it never has, or `null` if
+ *   storage is blocked.
+ */
+function readLastReload(): number | null {
+	try {
+		return Number(sessionStorage.getItem(ROUTE_RELOAD_ATTEMPTED)) || 0;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Records that this tab is reloading now.
+ *
+ * @param time - The current time in ms since 1970.
+ * @returns `true` if it was saved.
+ */
+function saveReloadTime(time: number): boolean {
+	try {
+		sessionStorage.setItem(ROUTE_RELOAD_ATTEMPTED, String(time));
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+interface RouteErrorBoundaryProps {
+	children: ReactNode;
+}
+
+interface RouteErrorBoundaryState {
+	failed: boolean;
+}
+
+/**
+ * Catches errors while rendering or loading the page below it, so one broken
+ * page can't blank the whole app: without a boundary, React removes the
+ * entire tree and leaves an empty page.
+ *
+ * Each deploy replaces the site's files, so a tab left open across a deploy
+ * asks for page files that no longer exist. Reloading fetches the new ones,
+ * so for that error it reloads by itself, at most once a minute. Any other
+ * error keeps the app's frame and shows `RouteErrorFallback`.
+ *
+ * @param props.children - The page to protect.
+ * @returns The page, or the fallback once it has failed.
+ */
+export class RouteErrorBoundary extends Component<
+	RouteErrorBoundaryProps,
+	RouteErrorBoundaryState
+> {
+	state: RouteErrorBoundaryState = { failed: false };
+
+	/**
+	 * Switches to the fallback after an error below.
+	 *
+	 * @returns The new state.
+	 */
+	static getDerivedStateFromError(): RouteErrorBoundaryState {
+		return { failed: true };
+	}
+
+	/**
+	 * Logs the error and, for a missing page file, reloads the page.
+	 *
+	 * @param error - What was thrown.
+	 * @param info - React's details, including which components were rendering.
+	 */
+	componentDidCatch(error: Error, info: ErrorInfo) {
+		// with the component stack, which React's own production log leaves out
+		console.error('Route failed to render', error, info.componentStack);
+
+		if (!isStaleChunkError(error)) return;
+
+		// Without storage there's no guard against a reload loop, so the
+		// fallback's button leaves the reload to the visitor. This code must not
+		// throw: an error here escapes the boundary and blanks the page.
+		const now = Date.now();
+		const lastReload = readLastReload();
+		if (lastReload === null || now - lastReload < RELOAD_COOLDOWN_MS) return;
+		if (!saveReloadTime(now)) return;
+		window.location.reload();
+	}
+
+	/**
+	 * Renders the page, or the fallback once something below has failed.
+	 *
+	 * @returns The children or the fallback.
+	 */
+	render() {
+		return this.state.failed ? <RouteErrorFallback /> : this.props.children;
+	}
+}
