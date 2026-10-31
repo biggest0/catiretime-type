@@ -7,6 +7,12 @@ export const AUTH_USER = 'auth_user';
 /** Display settings such as the theme (`AppSetting`). */
 export const APP_SETTING = 'appSetting';
 
+/**
+ * The UI language the visitor picked. i18next's language detector reads and
+ * writes it; the value is the detector's default name.
+ */
+export const UI_LANGUAGE = 'i18nextLng';
+
 // Cookies
 
 /**

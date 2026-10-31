@@ -1,0 +1,25 @@
+{
+  "COMMON": {
+    "LOAD": "Chargement",
+    "LOADING": "Chargement...",
+    "LANGUAGE": "Langue",
+    "LOAD_ERROR": "Impossible de charger cette section.",
+    "RETRY": "Réessayer",
+    "CLOSE": "Fermer",
+    "PAGE_ERROR": "Cette page ne s'est pas chargée.",
+    "RELOAD": "Recharger"
+  },
+  "THEME": {
+    "LIGHT": "Clair",
+    "DARK": "Sombre",
+    "SYSTEM": "Système",
+    "SWITCH_TO": "Passer en mode {{mode}}"
+  },
+  "LANGUAGE": {
+    "EN": "Anglais",
+    "FR": "Français"
+  },
+  "ACCOUNT": {
+    "ACCOUNT_LABEL": "Compte"
+  }
+}
