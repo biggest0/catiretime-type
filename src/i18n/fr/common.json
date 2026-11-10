@@ -23,6 +23,10 @@
   "AUTH": {
     "LOGIN": "Se connecter"
   },
+  "FOOTER": {
+    "BRAND_TAGLINE": "Exercices de dactylo par {{parentSite}}",
+    "PRIVACY": "Confidentialité"
+  },
   "SEO": {
     "HOME": {
       "DESCRIPTION": "Entraînez-vous à taper au clavier avec des nouvelles satiriques, de la littérature classique, des poèmes et des citations, en anglais et en français."

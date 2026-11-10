@@ -26,6 +26,9 @@ export const PAGE_ROUTES = {
 	// these two paths, so renaming one breaks that flow.
 	VERIFY_EMAIL: '/account/verification',
 	GOOGLE_CALLBACK: '/auth/google/callback',
+	// The footer links here. The page isn't written yet: until it is, this
+	// path shows the not-found page.
+	PRIVACY: '/privacy',
 } as const;
 
 /** Paths with parameters, for `<Route path>` only. */
