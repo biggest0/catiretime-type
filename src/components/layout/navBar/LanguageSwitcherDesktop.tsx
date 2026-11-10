@@ -25,7 +25,7 @@ export function LanguageSwitcherDesktop() {
 		<DropdownMenu>
 			<DropdownMenuTrigger
 				aria-label={t('COMMON.LANGUAGE')}
-				className="flex cursor-pointer items-center justify-center rounded-sm outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50"
+				className="flex cursor-pointer items-center justify-center rounded-sm hover:text-foreground"
 			>
 				<HiMiniLanguage className="h-6 w-6 transition-colors" />
 			</DropdownMenuTrigger>

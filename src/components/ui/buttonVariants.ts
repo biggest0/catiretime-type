@@ -11,10 +11,11 @@ import { cva } from 'class-variance-authority';
  * @returns The class string, e.g. `buttonVariants({ variant: 'outline' })`.
  */
 export const buttonVariants = cva(
-	// every variant: layout, the uppercase newspaper type, the focus ring, and
-	// the disabled, invalid and icon styles. The dark: classes are shadcn's
+	// every variant: layout, the uppercase newspaper type, and the disabled,
+	// invalid and icon styles. No focus classes: index.css draws the keyboard
+	// focus ring for everything (shadcn's own was too faint to see). The dark: classes are shadcn's
 	// opacity tweaks on tokens, the app's one allowed dark: exception
-	"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
+	"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-all select-none active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
 	{
 		variants: {
 			variant: {
@@ -31,9 +32,10 @@ export const buttonVariants = cva(
 					'hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50',
 				// a red tint: actions that delete or can't be undone
 				destructive:
-					'bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40',
-				// looks like a text link
-				link: 'text-primary underline underline-offset-4 hover:underline',
+					'bg-destructive/10 text-destructive hover:bg-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30',
+				// looks like a text link: the link colour (text-brand), not the
+				// button fill (text-primary is 2.15:1 on white)
+				link: 'text-brand underline underline-offset-4 hover:underline',
 			},
 			// heights from 28 px (xs) to 44 px (lg); icon-* sizes are square
 			size: {
