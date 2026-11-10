@@ -1,26 +1,65 @@
-import { Button } from '@/components/ui/Button';
-import { APP_VERSION } from '@/config/config';
-import { useAppSettings } from '@/hooks/useAppSettings';
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+
+import { LoadingOverlay } from '@/components/common/feedback/LoadingOverlay';
+import { RouteErrorBoundary } from '@/components/common/feedback/RouteErrorBoundary';
+import { Footer } from '@/components/layout/footer/Footer';
+import { Header } from '@/components/layout/header/Header';
+import { ScrollToTop } from '@/components/layout/navigation/ScrollToTop';
+import { PAGE_ROUTES } from '@/constants/routes';
+import HomePage from '@/pages/HomePage';
+
+// Every page except the home page loads on demand, from its own file, so a
+// visitor downloads only the pages they open. The home page stays in the
+// main file: most visits start there.
+const AccountPage = lazy(() => import('@/pages/AccountPage'));
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 /**
- * Temporary Phase 0 page: proves the fonts and colour tokens load in both
- * themes. Its button switches the saved theme. Replaced by the real app
- * shell later in Phase 1.
+ * The app: the router around the page layout. `main.tsx` renders it inside
+ * the Redux store and the settings provider.
+ *
+ * @returns The app.
  */
 export default function App() {
-	const { toggleDarkMode } = useAppSettings();
+	return (
+		<BrowserRouter>
+			<AppLayout />
+		</BrowserRouter>
+	);
+}
+
+/**
+ * Every page's frame: the header, the current page and the footer. A
+ * separate component because reading the location needs the router above it.
+ *
+ * @returns The header, the page for the current address and the footer.
+ */
+function AppLayout() {
+	// a new key on every navigation, which clears the error boundary
+	const location = useLocation();
 
 	return (
-		<main className="mx-auto w-full max-w-[1280px] px-4 py-16">
-			<h1 className="text-4xl text-section-label">Çatire Type</h1>
-			<h2 className="mt-6 text-2xl text-foreground">A heading in Cardo</h2>
-			<p className="mt-2">Body text in Tinos, the secondary text colour.</p>
-			<p className="mt-2 text-sm text-muted-foreground">A muted caption.</p>
-			<p className="mt-2 text-brand">The brand colour, used for links.</p>
-			<Button onClick={toggleDarkMode} className="mt-6">
-				Toggle dark mode
-			</Button>
-			<p className="mt-6 text-sm text-muted-foreground">{APP_VERSION}</p>
-		</main>
+		<>
+			<Header />
+			<main className="mx-auto min-h-screen w-full max-w-[1280px] bg-background px-4 transition-colors duration-200">
+				<ScrollToTop />
+				{/* Outside Suspense, so it also catches a page file that fails to
+				    load: a tab left open across a deploy asks for files that are
+				    gone. */}
+				<RouteErrorBoundary resetKey={location.key}>
+					<Suspense fallback={<LoadingOverlay loading />}>
+						<Routes>
+							<Route path={PAGE_ROUTES.HOME} element={<HomePage />} />
+							<Route path={PAGE_ROUTES.ACCOUNT} element={<AccountPage />} />
+							{/* Every other address, including the shell's paths whose
+							    pages come later (login, privacy…) */}
+							<Route path="*" element={<NotFoundPage />} />
+						</Routes>
+					</Suspense>
+				</RouteErrorBoundary>
+			</main>
+			<Footer />
+		</>
 	);
 }

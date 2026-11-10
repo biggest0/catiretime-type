@@ -27,9 +27,27 @@
     "BRAND_TAGLINE": "Typing practice by {{parentSite}}",
     "PRIVACY": "Privacy"
   },
+  "PAGES": {
+    "NOT_FOUND": {
+      "TITLE": "This page wandered off",
+      "MESSAGE": "Something knocked this page off the table. It may have been moved, or it may never have existed at all.",
+      "HOME": "Back to home"
+    },
+    "ACCOUNT": {
+      "TITLE": "Account"
+    }
+  },
   "SEO": {
     "HOME": {
+      "TITLE": "Typing practice",
       "DESCRIPTION": "Typing practice with satirical news, classic literature, poems and quotes, in English and French."
+    },
+    "NOT_FOUND": {
+      "TITLE": "Page not found",
+      "DESCRIPTION": "That page does not exist. Head back to the home page."
+    },
+    "ACCOUNT": {
+      "TITLE": "Account"
     }
   }
 }

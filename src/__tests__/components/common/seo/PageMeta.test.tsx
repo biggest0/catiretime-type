@@ -111,6 +111,11 @@ describe('PageMeta', () => {
 		expect(headValue('meta[name="description"]')).toBe(fr.SEO.HOME.DESCRIPTION);
 	});
 
+	it("ships the home page's title in index.html", () => {
+		// index.html can't read the translations, so it holds a copy
+		expect(document.title).toBe(`${en.SEO.HOME.TITLE} | ${SITE_NAME}`);
+	});
+
 	it('ships the same default description in index.html as SEO.HOME.DESCRIPTION', () => {
 		// index.html can't read the translations, so it holds a copy
 		expect(headValue('meta[name="description"]')).toBe(en.SEO.HOME.DESCRIPTION);

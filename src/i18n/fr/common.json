@@ -27,9 +27,27 @@
     "BRAND_TAGLINE": "Exercices de dactylo par {{parentSite}}",
     "PRIVACY": "Confidentialité"
   },
+  "PAGES": {
+    "NOT_FOUND": {
+      "TITLE": "Cette page s'est égarée",
+      "MESSAGE": "Quelque chose a fait tomber cette page de la table. Elle a peut-être été déplacée, ou n'a peut-être jamais existé.",
+      "HOME": "Retour à l'accueil"
+    },
+    "ACCOUNT": {
+      "TITLE": "Compte"
+    }
+  },
   "SEO": {
     "HOME": {
+      "TITLE": "Exercices de dactylo",
       "DESCRIPTION": "Entraînez-vous à taper au clavier avec des nouvelles satiriques, de la littérature classique, des poèmes et des citations, en anglais et en français."
+    },
+    "NOT_FOUND": {
+      "TITLE": "Page introuvable",
+      "DESCRIPTION": "Cette page n'existe pas. Retournez à l'accueil."
+    },
+    "ACCOUNT": {
+      "TITLE": "Compte"
     }
   }
 }
