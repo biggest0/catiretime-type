@@ -165,6 +165,20 @@ function refresh(): Promise<boolean> {
 }
 
 /**
+ * Waits for a refresh that's already on its way. Sign-in and sign-out call
+ * it before sending their own request, so the two never overlap. Overlapping
+ * answers can arrive in either order: a refresh sent before a sign-in is
+ * refused, and that late "no session" would sign the visitor out again; a
+ * refresh answered after a sign-out would sign them back in. It matters most
+ * at startup, when the session check runs on every page load, including the
+ * page a Google sign-in returns to.
+ */
+async function waitForRefresh(): Promise<void> {
+	// never rejects: performRefresh() turns every failure into `false`
+	if (inflightRefresh) await inflightRefresh;
+}
+
+/**
  * Checks the session once at startup. Call it once per page load, from
  * main.tsx; `isLoading` stays true until it has answered.
  */
@@ -184,6 +198,7 @@ async function bootstrap(): Promise<void> {
  * @throws ApiError from the server, for the page to turn into a message.
  */
 async function login(email: string, password: string): Promise<void> {
+	await waitForRefresh();
 	const { user } = await postLogin({ email, password });
 	signIn(user);
 }
@@ -196,6 +211,7 @@ async function login(email: string, password: string): Promise<void> {
  * @throws ApiError from the server, for the page to turn into a message.
  */
 async function register(email: string, password: string): Promise<void> {
+	await waitForRefresh();
 	const { user } = await postRegister({ email, password });
 	signIn(user);
 }
@@ -207,12 +223,16 @@ async function register(email: string, password: string): Promise<void> {
  * @throws ApiError from the server, for the page to turn into a message.
  */
 async function loginWithGoogle(loginCode: string): Promise<void> {
+	await waitForRefresh();
 	const { user } = await postGoogleExchange(loginCode);
 	signIn(user);
 }
 
 /** Signs out, here even when the server can't be told. */
 async function logout(): Promise<void> {
+	// after a refresh on its way, so the server ends the session that
+	// refresh just renewed, not the one it replaced
+	await waitForRefresh();
 	try {
 		await postLogout();
 	} catch {

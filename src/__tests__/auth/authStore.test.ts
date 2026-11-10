@@ -39,6 +39,40 @@ function saveUser(value: unknown) {
 	localStorage.setItem(AUTH_USER, JSON.stringify(value));
 }
 
+/**
+ * Stubs `fetch` so the refresh call hangs, like a slow server, until the
+ * test answers it. Every other call is answered at once.
+ *
+ * @param otherAnswer - Builds the answer for every call but the refresh.
+ * @returns `calls`, the paths requested so far, in order, and
+ *   `answerRefresh`, which answers the hanging refresh.
+ */
+function holdRefresh(otherAnswer: () => Response) {
+	const calls: string[] = [];
+	let resolveRefresh: (response: Response) => void = () => {};
+
+	vi.spyOn(globalThis, 'fetch').mockImplementation((input) => {
+		const path = new URL(String(input)).pathname;
+		calls.push(path);
+		if (path === '/auth/user/refresh') {
+			return new Promise<Response>((resolve) => {
+				resolveRefresh = resolve;
+			});
+		}
+		return Promise.resolve(otherAnswer());
+	});
+
+	return {
+		calls,
+		answerRefresh: (response: Response) => resolveRefresh(response),
+	};
+}
+
+/** Lets everything that can run now run, before the test looks. */
+function settle(): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, 0));
+}
+
 afterEach(() => {
 	vi.restoreAllMocks();
 	localStorage.clear();
@@ -191,5 +225,55 @@ describe('authStore.bootstrap', () => {
 			isAuthenticated: false,
 			isLoading: false,
 		});
+	});
+});
+
+describe('authStore: sign-in and sign-out wait for a refresh on its way', () => {
+	it('keeps a sign-in made while the startup check is still out', async () => {
+		const authStore = await loadStore();
+		const { calls, answerRefresh } = holdRefresh(() =>
+			jsonResponse({ user }, 200)
+		);
+
+		const startup = authStore.bootstrap();
+		const login = authStore.login(user.email, 'pw');
+		await settle();
+		// the login isn't sent while the check is out
+		expect(calls).toEqual(['/auth/user/refresh']);
+
+		// the check was sent before the sign-in, so the server refuses it. If
+		// this answer came after the login's, it would sign the visitor out
+		answerRefresh(jsonResponse({ error: 'Refresh token is required' }, 401));
+		await Promise.all([startup, login]);
+
+		expect(calls).toEqual(['/auth/user/refresh', '/auth/user/login']);
+		expect(authStore.getState()).toMatchObject({ user, isAuthenticated: true });
+		expect(JSON.parse(localStorage.getItem(AUTH_USER)!)).toEqual(user);
+	});
+
+	it('stays signed out when a refresh was on its way at sign-out', async () => {
+		saveUser(user);
+		const authStore = await loadStore();
+		const { calls, answerRefresh } = holdRefresh(() =>
+			jsonResponse({ message: 'Logged out successfully' }, 200)
+		);
+
+		const refreshing = authStore.refresh();
+		const logout = authStore.logout();
+		await settle();
+		// the sign-out isn't sent while the refresh is out
+		expect(calls).toEqual(['/auth/user/refresh']);
+
+		// the refresh succeeds. If this answer came after the sign-out's, it
+		// would sign the visitor back in
+		answerRefresh(jsonResponse({ user }, 200));
+		await Promise.all([refreshing, logout]);
+
+		expect(calls).toEqual(['/auth/user/refresh', '/auth/user/logout']);
+		expect(authStore.getState()).toMatchObject({
+			user: null,
+			isAuthenticated: false,
+		});
+		expect(localStorage.getItem(AUTH_USER)).toBeNull();
 	});
 });
