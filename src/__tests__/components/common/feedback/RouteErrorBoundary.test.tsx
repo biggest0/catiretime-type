@@ -30,7 +30,9 @@ function StalePage(): ReactNode {
  * @param page - The page element to render.
  */
 function visit(page: ReactNode) {
-	render(<RouteErrorBoundary>{page}</RouteErrorBoundary>).unmount();
+	render(
+		<RouteErrorBoundary resetKey="first">{page}</RouteErrorBoundary>
+	).unmount();
 }
 
 beforeEach(() => {
@@ -56,7 +58,7 @@ afterEach(() => {
 describe('RouteErrorBoundary', () => {
 	it('renders the page when nothing fails', () => {
 		render(
-			<RouteErrorBoundary>
+			<RouteErrorBoundary resetKey="first">
 				<p>Home</p>
 			</RouteErrorBoundary>
 		);
@@ -66,7 +68,7 @@ describe('RouteErrorBoundary', () => {
 
 	it('shows the fallback for an ordinary error, without reloading', () => {
 		render(
-			<RouteErrorBoundary>
+			<RouteErrorBoundary resetKey="first">
 				<BrokenPage />
 			</RouteErrorBoundary>
 		);
@@ -75,9 +77,30 @@ describe('RouteErrorBoundary', () => {
 		expect(reload).not.toHaveBeenCalled();
 	});
 
+	it('renders the next page after a navigation, not the fallback', () => {
+		const { rerender } = render(
+			<RouteErrorBoundary resetKey="first">
+				<BrokenPage />
+			</RouteErrorBoundary>
+		);
+		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
+
+		// the visitor follows a link: a new location key and another page
+		rerender(
+			<RouteErrorBoundary resetKey="second">
+				<p>Account</p>
+			</RouteErrorBoundary>
+		);
+
+		expect(screen.getByText('Account')).toBeInTheDocument();
+		expect(
+			screen.queryByText("This page didn't load.")
+		).not.toBeInTheDocument();
+	});
+
 	it("reloads from the fallback's button", async () => {
 		render(
-			<RouteErrorBoundary>
+			<RouteErrorBoundary resetKey="first">
 				<BrokenPage />
 			</RouteErrorBoundary>
 		);
@@ -112,7 +135,7 @@ describe('RouteErrorBoundary', () => {
 		});
 
 		render(
-			<RouteErrorBoundary>
+			<RouteErrorBoundary resetKey="first">
 				<StalePage />
 			</RouteErrorBoundary>
 		);

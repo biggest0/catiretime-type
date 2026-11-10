@@ -57,6 +57,8 @@ function saveReloadTime(time: number): boolean {
 
 interface RouteErrorBoundaryProps {
 	children: ReactNode;
+	/** Changes on every navigation: `App` passes the location's key. */
+	resetKey: string;
 }
 
 interface RouteErrorBoundaryState {
@@ -71,9 +73,12 @@ interface RouteErrorBoundaryState {
  * Each deploy replaces the site's files, so a tab left open across a deploy
  * asks for page files that no longer exist. Reloading fetches the new ones,
  * so for that error it reloads by itself, at most once a minute. Any other
- * error keeps the app's frame and shows `RouteErrorFallback`.
+ * error keeps the app's frame and shows `RouteErrorFallback`, until the
+ * visitor goes to another page: then it renders the new page again.
  *
  * @param props.children - The page to protect.
+ * @param props.resetKey - A value that changes on every navigation (the
+ * 	location's key); after a failure, a new value clears the fallback.
  * @returns The page, or the fallback once it has failed.
  */
 export class RouteErrorBoundary extends Component<
@@ -111,6 +116,19 @@ export class RouteErrorBoundary extends Component<
 		if (lastReload === null || now - lastReload < RELOAD_COOLDOWN_MS) return;
 		if (!saveReloadTime(now)) return;
 		window.location.reload();
+	}
+
+	/**
+	 * Clears the fallback when the visitor navigates after a failure, so the
+	 * error stays on the page that failed. Without this, every page would show
+	 * the fallback until a full reload, even with working links in the header.
+	 *
+	 * @param prevProps - The props of the previous render.
+	 */
+	componentDidUpdate(prevProps: RouteErrorBoundaryProps) {
+		if (this.state.failed && prevProps.resetKey !== this.props.resetKey) {
+			this.setState({ failed: false });
+		}
 	}
 
 	/**
