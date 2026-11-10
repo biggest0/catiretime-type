@@ -24,7 +24,8 @@ test('the mobile menu shows the app version', async ({ page }) => {
 
 	await page.getByRole('button', { name: 'Toggle menu' }).click();
 
-	await expect(
-		page.getByRole('dialog').getByText(/^v\d+\.\d+\.\d+$/)
-	).toBeVisible();
+	const menu = page.getByRole('dialog');
+	await expect(menu.getByText(/^v\d+\.\d+\.\d+$/)).toBeVisible();
+	// full-screen: the side panel's edge line would show down the left side
+	await expect(menu).toHaveCSS('border-left-width', '0px');
 });

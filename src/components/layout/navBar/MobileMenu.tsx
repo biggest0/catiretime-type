@@ -50,7 +50,9 @@ export function MobileMenu({
 				// no visible title, so the label names the dialog
 				aria-label={t('NAVIGATION.MENU_LABEL')}
 				className={cn(
-					'border-l-0 bg-background text-foreground-secondary data-[side=right]:w-full data-[side=right]:sm:max-w-none md:hidden',
+					// Each override repeats the Sheet's own `data-[side=right]:`
+					// prefix: a plain class (border-l-0) loses to the prefixed one.
+					'bg-background text-foreground-secondary data-[side=right]:w-full data-[side=right]:border-l-0 data-[side=right]:sm:max-w-none md:hidden',
 					// follow the finger without the slide animation's delay
 					isDragging && 'transition-none'
 				)}
