@@ -42,6 +42,14 @@ export default defineConfig({
 	},
 	base: '/',
 	build: {
+		// Font files always stay files. By default Vite embeds any file under
+		// 4 kB in the stylesheet as base64 text, and the font packages ship
+		// tiny files for scripts almost no page uses (Gothic, Runic…): every
+		// visitor then downloaded them inside the CSS, before the first paint.
+		// As files, a browser fetches only the ones whose characters are on
+		// the page. Other small files keep the default (undefined).
+		assetsInlineLimit: (filePath) =>
+			/\.woff2?$/.test(filePath) ? false : undefined,
 		rollupOptions: {
 			output: {
 				// Rarely-changing vendors in their own cacheable chunks: an app deploy
