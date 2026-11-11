@@ -29,3 +29,21 @@ test.describe('with a browser language the app does not support', () => {
 		await expect(page.locator('html')).toHaveAttribute('lang', 'en');
 	});
 });
+
+test('a language picked in one tab reaches the other tabs', async ({
+	context,
+	page,
+}) => {
+	const otherTab = await context.newPage();
+	await stubAnonymousVisitor(otherTab);
+	await page.goto('/');
+	await otherTab.goto('/');
+	await expect(otherTab.locator('html')).toHaveAttribute('lang', 'en');
+
+	await page.getByRole('button', { name: 'Language' }).click();
+	await page.getByRole('menuitemradio', { name: /Français/ }).click();
+
+	await expect(page.locator('html')).toHaveAttribute('lang', 'fr');
+	// the browser tells the other tab that the saved language changed
+	await expect(otherTab.locator('html')).toHaveAttribute('lang', 'fr');
+});

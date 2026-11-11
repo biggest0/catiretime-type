@@ -23,6 +23,19 @@ i18n.on('languageChanged', (language) => {
 	document.documentElement.lang = language;
 });
 
+// Follow the language picked in another tab, as the theme does. The browser
+// sends `storage` to every other tab of the site when one saves a value.
+// Only a language from the list counts: anything else (the key removed, a
+// value the app never wrote) leaves this tab as it is.
+window.addEventListener('storage', (event) => {
+	if (event.key !== UI_LANGUAGE) return;
+
+	const language = LANGUAGES.find(({ code }) => code === event.newValue);
+	if (language && language.code !== i18n.resolvedLanguage) {
+		void i18n.changeLanguage(language.code);
+	}
+});
+
 /**
  * The app's single i18next instance. Importing this module initialises it,
  * so import it once, at startup. Components read translations through

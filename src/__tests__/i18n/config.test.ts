@@ -42,6 +42,34 @@ describe('i18n config', () => {
 		expect(document.documentElement.lang).toBe('en');
 	});
 
+	it('follows the language picked in another tab', async () => {
+		// what the browser tells this tab when another tab saves its choice
+		window.dispatchEvent(
+			new StorageEvent('storage', { key: UI_LANGUAGE, newValue: 'fr' })
+		);
+
+		await vi.waitFor(() => expect(i18n.resolvedLanguage).toBe('fr'));
+		expect(document.documentElement.lang).toBe('fr');
+	});
+
+	it.each([
+		['another key', { key: 'appSetting', newValue: 'fr' }],
+		[
+			'a language the app does not support',
+			{ key: UI_LANGUAGE, newValue: 'de' },
+		],
+		['the saved language being removed', { key: UI_LANGUAGE, newValue: null }],
+	])(
+		'keeps its language when another tab changes %s',
+		async (_label, change) => {
+			window.dispatchEvent(new StorageEvent('storage', change));
+
+			// give a wrong language change the time to happen
+			await new Promise((resolve) => setTimeout(resolve, 20));
+			expect(i18n.resolvedLanguage).toBe('en');
+		}
+	);
+
 	it('falls back to English for a language the app does not support', async () => {
 		await i18n.changeLanguage('de');
 
