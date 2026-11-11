@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { SITE_NAME } from '../src/constants/site';
+import en from '../src/i18n/en/common.json' with { type: 'json' };
 import { stubAnonymousVisitor } from './support/stubApi';
 
 test.beforeEach(async ({ page }) => {
@@ -11,7 +13,7 @@ test('home page loads with the site title, header, heading and footer', async ({
 }) => {
 	await page.goto('/');
 
-	await expect(page).toHaveTitle('Typing practice | Çatire Type');
+	await expect(page).toHaveTitle(`${en.SEO.HOME.TITLE} | ${SITE_NAME}`);
 	await expect(page.getByRole('banner')).toBeVisible();
 	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
 	await expect(page.getByRole('contentinfo')).toBeVisible();

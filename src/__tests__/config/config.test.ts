@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { APP_VERSION, SITE_URL } from '@/config/config';
+// the real package.json: the build takes the version and address from it
+import packageJson from '@/../package.json';
 
 describe('config', () => {
 	it("takes the app version from package.json through Vite's define", () => {
@@ -10,6 +12,7 @@ describe('config', () => {
 	});
 
 	it('takes the site origin from package.json, without a trailing slash', () => {
-		expect(SITE_URL).toBe('https://type.catiretime.com');
+		expect(packageJson.homepage).toMatch(/\/$/);
+		expect(`${SITE_URL}/`).toBe(packageJson.homepage);
 	});
 });

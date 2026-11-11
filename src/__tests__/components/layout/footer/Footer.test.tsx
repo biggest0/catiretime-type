@@ -7,6 +7,7 @@ import '@/i18n/config';
 import { Footer } from '@/components/layout/footer/Footer';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { PARENT_SITE, SITE_NAME, SOCIAL_PROFILES } from '@/constants/site';
+import en from '@/i18n/en/common.json';
 
 afterEach(() => {
 	vi.useRealTimers();
@@ -31,15 +32,18 @@ describe('Footer', () => {
 		const footer = renderFooter();
 
 		expect(within(footer).getByText(SITE_NAME)).toBeVisible();
-		expect(
-			within(footer).getByText(`Typing practice by ${PARENT_SITE.name}`)
-		).toBeVisible();
+		// the tagline is each app's own: read it, with the name filled in
+		const tagline = en.FOOTER.BRAND_TAGLINE.replace(
+			'{{parentSite}}',
+			PARENT_SITE.name
+		);
+		expect(within(footer).getByText(tagline)).toBeVisible();
 		SOCIAL_PROFILES.forEach(({ label }) => {
 			expect(within(footer).getByRole('link', { name: label })).toBeVisible();
 		});
 	});
 
-	it('dates the copyright from the clock and links its name to Çatire Time', () => {
+	it('dates the copyright from the clock and links its name to the parent site', () => {
 		// only Date is faked: nothing here waits on a timer
 		vi.useFakeTimers({ toFake: ['Date'] });
 		vi.setSystemTime(new Date(2031, 5, 15));

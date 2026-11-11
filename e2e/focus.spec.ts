@@ -1,6 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 import { APP_SETTING } from '../src/constants/keys';
+import { SITE_NAME } from '../src/constants/site';
 import { stubAnonymousVisitor } from './support/stubApi';
 
 // Keyboard users find their place by the focus ring. index.css draws one ring
@@ -204,10 +205,7 @@ test("a link to the page you're on scrolls back to the top", async ({
 	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(400);
 
 	// the wordmark links to the home page, which is this page
-	await page
-		.getByRole('banner')
-		.getByRole('link', { name: 'Çatire Type' })
-		.click();
+	await page.getByRole('banner').getByRole('link', { name: SITE_NAME }).click();
 
 	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 });
