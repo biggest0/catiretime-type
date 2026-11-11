@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 import { APP_SETTING } from '../src/constants/keys';
 import { SITE_NAME } from '../src/constants/site';
+import { findTabKey } from './support/keyboard';
 import { stubAnonymousVisitor } from './support/stubApi';
 
 // Keyboard users find their place by the focus ring. index.css draws one ring
@@ -66,6 +67,8 @@ for (const themeMode of ['light', 'dark']) {
 	test(`every keyboard stop shows a clear focus ring (${themeMode})`, async ({
 		page,
 	}) => {
+		// Tab, or Option+Tab in Safari, where plain Tab passes links by
+		const tabKey = await findTabKey(page);
 		await saveTheme(page, themeMode);
 		// the not-found page: it adds a button-styled link to the header's and
 		// footer's links
@@ -83,7 +86,7 @@ for (const themeMode of ['light', 'dark']) {
 		const focused = page.locator(':focus');
 
 		for (let stop = 0; stop < stops; stop += 1) {
-			await page.keyboard.press('Tab');
+			await page.keyboard.press(tabKey);
 			// Each check retries until it passes: buttons fade their styles in
 			// over 150 ms, so the first reading can be a colour in between.
 			await expect(focused).toHaveCSS('outline-style', 'solid');
@@ -109,7 +112,8 @@ test('a mouse click shows no focus ring', async ({ page }) => {
 
 	await themeButton.click();
 
-	await expect(themeButton).toBeFocused();
+	// Chrome and Firefox give a clicked button focus, Safari doesn't: either
+	// way a mouse user must see no ring
 	await expect(themeButton).toHaveCSS('outline-style', 'none');
 });
 
@@ -137,6 +141,7 @@ test('the language menu rings the item the keyboard is on', async ({
 test('the skip link is the first Tab stop and jumps to the content', async ({
 	page,
 }) => {
+	const tabKey = await findTabKey(page);
 	await page.goto('/no-such-page');
 	// this page's code loads on demand: wait for it, as a visitor would. (Used
 	// before it has arrived, the link focuses the content area instead.)
@@ -145,7 +150,7 @@ test('the skip link is the first Tab stop and jumps to the content', async ({
 	// parked above the top edge until it has focus
 	await expect(skipLink).not.toBeInViewport();
 
-	await page.keyboard.press('Tab');
+	await page.keyboard.press(tabKey);
 	await expect(skipLink).toBeFocused();
 	await expect(skipLink).toBeInViewport();
 	await page.keyboard.press('Enter');
@@ -154,7 +159,7 @@ test('the skip link is the first Tab stop and jumps to the content', async ({
 	// the address is unchanged: no "#main-content", no extra Back step
 	await expect(page).toHaveURL('/no-such-page');
 	// and Tab goes on into the page, not back through the header
-	await page.keyboard.press('Tab');
+	await page.keyboard.press(tabKey);
 	await expect(page.getByRole('link', { name: 'Back to home' })).toBeFocused();
 });
 
