@@ -4,10 +4,14 @@
  * the UI language: a visitor who can't read the current one still finds
  * theirs. `config.ts` takes `supportedLngs` from this list.
  *
- * To add a language: add it here, add its `<code>/common.json`, and load
- * that file in `config.ts`'s `resources` (a test checks the two match).
+ * `ogLocale` is the language and country that link previews are tagged with
+ * (Open Graph's `language_TERRITORY` form); `PageMeta` reads it.
+ *
+ * To add a language: add it here, add its `<code>/common.json`, load that
+ * file in `config.ts`'s `resources`, and add its `og:locale:alternate` tag
+ * to index.html (tests check all three).
  */
 export const LANGUAGES = [
-	{ code: 'en', name: 'English' },
-	{ code: 'fr', name: 'Français' },
+	{ code: 'en', name: 'English', ogLocale: 'en_CA' },
+	{ code: 'fr', name: 'Français', ogLocale: 'fr_CA' },
 ] as const;

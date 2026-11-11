@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import { SITE_NAME } from '@/constants/site';
+import { LANGUAGES } from '@/i18n/languages';
 import { absoluteUrl } from '@/utils/seo/urlUtils';
 
 interface PageMetaProps {
@@ -33,6 +34,33 @@ function setMetaTag(attr: 'name' | 'property', key: string, content: string) {
 		document.head.appendChild(tag);
 	}
 	tag.setAttribute('content', content);
+}
+
+/**
+ * Sets the group of `<meta>` tags that share one `property`, one tag per
+ * value: fills the tags that exist, adds the missing ones and removes any
+ * left over.
+ *
+ * @param property - The property every tag has, e.g. `og:locale:alternate`.
+ * @param contents - The values, one per tag, in order.
+ */
+function setMetaTagGroup(property: string, contents: readonly string[]) {
+	const tags = [
+		...document.head.querySelectorAll<HTMLMetaElement>(
+			`meta[property="${property}"]`
+		),
+	];
+
+	contents.forEach((content, index) => {
+		let tag = tags[index];
+		if (!tag) {
+			tag = document.createElement('meta');
+			tag.setAttribute('property', property);
+			document.head.appendChild(tag);
+		}
+		tag.setAttribute('content', content);
+	});
+	tags.slice(contents.length).forEach((tag) => tag.remove());
 }
 
 /**
@@ -83,7 +111,11 @@ export function PageMeta({
 	const fullTitle = `${title} | ${SITE_NAME}`;
 	const metaDescription = description ?? t('SEO.HOME.DESCRIPTION');
 	const canonical = absoluteUrl(path ?? location.pathname);
-	const isFrench = i18n.resolvedLanguage === 'fr';
+	// the UI language's entry in the list (the first, if i18n hasn't settled
+	// on one of them)
+	const { ogLocale } =
+		LANGUAGES.find(({ code }) => code === i18n.resolvedLanguage) ??
+		LANGUAGES[0];
 
 	useEffect(() => {
 		// edits index.html's <title> rather than adding a second one
@@ -96,13 +128,20 @@ export function PageMeta({
 		setMetaTag('property', 'og:title', fullTitle);
 		setMetaTag('property', 'og:description', metaDescription);
 		setMetaTag('property', 'og:url', canonical);
-		setMetaTag('property', 'og:locale', isFrench ? 'fr_CA' : 'en_CA');
-		setMetaTag('property', 'og:locale:alternate', isFrench ? 'en_CA' : 'fr_CA');
+		// the page's language, then one "also available in" tag for each
+		// other language in the list
+		setMetaTag('property', 'og:locale', ogLocale);
+		setMetaTagGroup(
+			'og:locale:alternate',
+			LANGUAGES.map((language) => language.ogLocale).filter(
+				(locale) => locale !== ogLocale
+			)
+		);
 
 		// X cards (the card type is static in index.html)
 		setMetaTag('name', 'twitter:title', fullTitle);
 		setMetaTag('name', 'twitter:description', metaDescription);
-	}, [fullTitle, metaDescription, canonical, isFrench, noindex]);
+	}, [fullTitle, metaDescription, canonical, ogLocale, noindex]);
 
 	return null;
 }

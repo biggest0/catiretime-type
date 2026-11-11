@@ -9,6 +9,7 @@ import { SITE_NAME } from '@/constants/site';
 import en from '@/i18n/en/common.json';
 import fr from '@/i18n/fr/common.json';
 import i18n from '@/i18n/config';
+import { LANGUAGES } from '@/i18n/languages';
 // the real index.html, so the tests edit the tags the app actually ships
 import indexHtml from '@/../index.html?raw';
 
@@ -24,6 +25,18 @@ const shippedHead = new DOMParser().parseFromString(indexHtml, 'text/html').head
  */
 function headValue(selector: string, attr = 'content') {
 	return document.head.querySelector(selector)?.getAttribute(attr) ?? null;
+}
+
+/**
+ * Reads the values of every tag that matches, in page order.
+ *
+ * @param selector - CSS selector for the tags.
+ * @returns Each tag's `content`.
+ */
+function headValues(selector: string) {
+	return [...document.head.querySelectorAll(selector)].map((tag) =>
+		tag.getAttribute('content')
+	);
 }
 
 /**
@@ -107,8 +120,18 @@ describe('PageMeta', () => {
 		renderAt(<PageMeta title="Compte" />);
 
 		expect(headValue('meta[property="og:locale"]')).toBe('fr_CA');
-		expect(headValue('meta[property="og:locale:alternate"]')).toBe('en_CA');
+		expect(headValues('meta[property="og:locale:alternate"]')).toEqual([
+			'en_CA',
+		]);
 		expect(headValue('meta[name="description"]')).toBe(fr.SEO.HOME.DESCRIPTION);
+	});
+
+	it('ships a link-preview language tag for every language in index.html', () => {
+		// before the app runs: the first language, and the others as alternates
+		const [first, ...others] = LANGUAGES.map(({ ogLocale }) => ogLocale);
+
+		expect(headValue('meta[property="og:locale"]')).toBe(first);
+		expect(headValues('meta[property="og:locale:alternate"]')).toEqual(others);
 	});
 
 	it("ships the home page's title in index.html", () => {
