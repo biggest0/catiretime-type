@@ -34,7 +34,7 @@ describe('SectionBar', () => {
 	it('marks the section of the current page', () => {
 		renderAt(PAGE_ROUTES.HOME);
 
-		expect(screen.getByRole('link', { name: 'HOME' })).toHaveAttribute(
+		expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute(
 			'aria-current',
 			'page'
 		);
@@ -43,7 +43,7 @@ describe('SectionBar', () => {
 	it('marks no section on a page outside the list', () => {
 		renderAt(PAGE_ROUTES.ACCOUNT);
 
-		expect(screen.getByRole('link', { name: 'HOME' })).not.toHaveAttribute(
+		expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute(
 			'aria-current'
 		);
 	});

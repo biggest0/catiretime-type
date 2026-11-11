@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import '@/i18n/config';
 import App from '@/App';
 import { AppSettingProvider } from '@/contexts/AppSettingProvider';
+import en from '@/i18n/en/common.json';
 
 // Lets one test make the home page crash, as a bug would. The flag is
 // created with vi.hoisted because vi.mock runs before the file's other code.
@@ -52,7 +53,7 @@ describe('App', () => {
 		openAt('/');
 
 		expect(
-			screen.getByRole('heading', { level: 1, name: 'TYPING PRACTICE' })
+			screen.getByRole('heading', { level: 1, name: en.SEO.HOME.TITLE })
 		).toBeInTheDocument();
 		expect(screen.getByRole('banner')).toBeInTheDocument();
 		expect(screen.getByRole('main')).toBeInTheDocument();
@@ -63,7 +64,10 @@ describe('App', () => {
 		openAt('/account');
 
 		expect(
-			await screen.findByRole('heading', { level: 1, name: 'ACCOUNT' })
+			await screen.findByRole('heading', {
+				level: 1,
+				name: en.PAGES.ACCOUNT.TITLE,
+			})
 		).toBeInTheDocument();
 	});
 
@@ -80,7 +84,7 @@ describe('App', () => {
 		await userEvent.click(screen.getByRole('link', { name: 'Back to home' }));
 
 		expect(
-			screen.getByRole('heading', { level: 1, name: 'TYPING PRACTICE' })
+			screen.getByRole('heading', { level: 1, name: en.SEO.HOME.TITLE })
 		).toBeInTheDocument();
 	});
 

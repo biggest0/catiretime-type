@@ -22,7 +22,7 @@ describe('Header', () => {
 		// two unnamed navigation areas couldn't be told apart (backport K36)
 		const navigation = within(banner).getByRole('navigation');
 		expect(
-			within(navigation).getByRole('link', { name: 'HOME' })
+			within(navigation).getByRole('link', { name: 'Home' })
 		).toBeInTheDocument();
 	});
 });

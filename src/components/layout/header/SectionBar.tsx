@@ -24,14 +24,16 @@ export function SectionBar() {
 						to={path}
 						className={({ isActive }) =>
 							cn(
-								'cursor-pointer py-1 text-base font-medium whitespace-nowrap transition-colors md:text-lg',
+								// uppercase: capitals from CSS, real text in the page (see
+								// SectionHeader)
+								'cursor-pointer py-1 text-base font-medium whitespace-nowrap uppercase transition-colors md:text-lg',
 								isActive
 									? 'text-brand underline'
 									: 'text-foreground-secondary hover:text-foreground'
 							)
 						}
 					>
-						{t(labelKey).toUpperCase()}
+						{t(labelKey)}
 					</NavLink>
 				))}
 			</div>
