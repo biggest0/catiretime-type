@@ -15,9 +15,20 @@ import { ScrollToTop } from '@/components/layout/navigation/ScrollToTop';
 function LongPage() {
 	const navigate = useNavigate();
 	return (
-		<button type="button" onClick={() => navigate(-1)}>
-			Back
-		</button>
+		<>
+			<button type="button" onClick={() => navigate(-1)}>
+				Back
+			</button>
+			<Link to="/long">This same page</Link>
+			<Link to="/long#notes">A place in this page</Link>
+			{/* what a filter does: the address changes, the page doesn't */}
+			<button
+				type="button"
+				onClick={() => navigate('/long?sort=new', { replace: true })}
+			>
+				Sort
+			</button>
+		</>
 	);
 }
 
@@ -32,6 +43,13 @@ function renderPages() {
 			</Routes>
 		</MemoryRouter>
 	);
+}
+
+/** Opens the long page and forgets the scroll that made. */
+async function openLongPage() {
+	renderPages();
+	await userEvent.click(screen.getByRole('link'));
+	scrollTo.mockClear();
 }
 
 // jsdom doesn't implement scrolling
@@ -70,6 +88,32 @@ describe('ScrollToTop', () => {
 		await userEvent.click(screen.getByRole('button', { name: 'Back' }));
 
 		expect(screen.getByRole('link')).toBeInTheDocument();
+		expect(scrollTo).not.toHaveBeenCalled();
+	});
+
+	it("scrolls to the top for a link to the page you're already on", async () => {
+		await openLongPage();
+
+		await userEvent.click(screen.getByRole('link', { name: 'This same page' }));
+
+		expect(scrollTo).toHaveBeenCalledOnce();
+	});
+
+	it("doesn't scroll when the address changes within the page", async () => {
+		await openLongPage();
+
+		await userEvent.click(screen.getByRole('button', { name: 'Sort' }));
+
+		expect(scrollTo).not.toHaveBeenCalled();
+	});
+
+	it("doesn't scroll for a link to a place inside a page", async () => {
+		await openLongPage();
+
+		await userEvent.click(
+			screen.getByRole('link', { name: 'A place in this page' })
+		);
+
 		expect(scrollTo).not.toHaveBeenCalled();
 	});
 });
