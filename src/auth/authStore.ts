@@ -116,9 +116,9 @@ function signOut(): void {
 /**
  * Whether a session might exist, so startup should check. Always true for
  * now: page code can't see the HttpOnly session cookies, and a visitor who
- * signed in on another Çatire app has nothing saved here. Once sign-in sets
- * `SHARED_SESSION_COOKIE`, check it here, so visitors without a session
- * skip the call.
+ * signed in on another Çatire app has nothing saved here. Once sign-in also
+ * sets a cookie that page code can read, check it here, so visitors without
+ * a session skip the call.
  *
  * @returns `true` when startup should ask the server.
  */

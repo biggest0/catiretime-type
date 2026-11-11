@@ -23,12 +23,3 @@ export const UI_LANGUAGE = 'i18nextLng';
  * (`RouteErrorBoundary`), so it never reloads in a loop.
  */
 export const ROUTE_RELOAD_ATTEMPTED = 'routeReloadAttempted';
-
-// Cookies
-
-/**
- * Readable cookie, shared by every Çatire app, saying that a session exists.
- * It lets an app skip the session refresh call for visitors who aren't
- * signed in.
- */
-export const SHARED_SESSION_COOKIE = 'catire_session';
