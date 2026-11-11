@@ -5,9 +5,19 @@ import tailwindcss from '@tailwindcss/vite';
 import { fileURLToPath } from 'node:url';
 import pkg from './package.json' with { type: 'json' };
 
-/** Vendor chunk name → the npm packages that go in it (see `manualChunks`). */
-const vendorChunks = {
-	react: ['react', 'react-dom', 'react-router-dom'],
+/**
+ * Vendor chunk name → the npm packages that go in it (see `manualChunks`).
+ *
+ * A package that isn't named here still ends up in one of these files when
+ * a named package imports it: Rollup keeps a dependency with what uses it
+ * (`scheduler` with `react-dom`, the `@floating-ui` packages with base-ui).
+ * So name the packages whose code you want to place, and check the result
+ * with `npm run build:report`, which lists what each file really holds.
+ * `react-router` is named because `react-router-dom` only re-exports it: the
+ * router's code is in that package.
+ */
+export const vendorChunks: Record<string, string[]> = {
+	react: ['react', 'react-dom', 'react-router', 'react-router-dom'],
 	redux: ['@reduxjs/toolkit', 'react-redux'],
 	i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
 	baseui: ['@base-ui/react'],
