@@ -83,6 +83,29 @@ describe('NavBar mobile menu', () => {
 		expect(within(menu).getByText(APP_VERSION)).toBeInTheDocument();
 	});
 
+	it('tells screen readers that its button opens a dialog, and when', async () => {
+		mockNarrowScreen();
+		render(
+			<AppSettingProvider>
+				<MemoryRouter>
+					<NavBar />
+				</MemoryRouter>
+			</AppSettingProvider>
+		);
+		const menuButton = screen.getByRole('button', { name: 'Toggle menu' });
+		expect(menuButton).toHaveAttribute('aria-haspopup', 'dialog');
+		expect(menuButton).toHaveAttribute('aria-expanded', 'false');
+
+		await userEvent.click(menuButton);
+		await screen.findByRole('dialog', { name: 'Navigation menu' });
+
+		// the open menu hides everything else from screen readers, its button
+		// included, so it's found by its element
+		expect(
+			document.querySelector('button[aria-haspopup="dialog"]')
+		).toHaveAttribute('aria-expanded', 'true');
+	});
+
 	it('closes when a link in it is followed, even to the current page', async () => {
 		mockNarrowScreen();
 		const menu = await openMenu();

@@ -34,6 +34,10 @@ export function HamburgerButton({
 			type="button"
 			onClick={onClick}
 			aria-label={t('NAVIGATION.TOGGLE_MENU')}
+			// what base-ui's own dialog trigger tells screen readers: it opens
+			// a dialog, and whether that dialog is open
+			aria-haspopup="dialog"
+			aria-expanded={isOpen}
 			className="flex h-6 w-6 cursor-pointer flex-col items-center justify-center"
 		>
 			<span className={cn(LINE, isOpen && 'translate-y-1.5 rotate-45')} />
