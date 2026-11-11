@@ -66,9 +66,10 @@ interface RouteErrorBoundaryState {
 }
 
 /**
- * Catches errors while rendering or loading the page below it, so one broken
- * page can't blank the whole app: without a boundary, React removes the
- * entire tree and leaves an empty page.
+ * Catches errors while rendering or loading what's below it, so one broken
+ * part can't blank the whole app: without a boundary, React removes the
+ * entire tree and leaves an empty page. `App` uses two: around each page,
+ * and around the whole frame.
  *
  * Each deploy replaces the site's files, so a tab left open across a deploy
  * asks for page files that no longer exist. Reloading fetches the new ones,

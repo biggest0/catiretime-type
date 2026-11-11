@@ -37,14 +37,21 @@ export default function App() {
  * footer. A separate component because reading the location needs the
  * router above it.
  *
+ * Two error boundaries, one inside the other. The inner one is around the
+ * page only: when a page fails, the header and footer stay, so the visitor
+ * can go elsewhere. The outer one is around the frame itself: if the header,
+ * the footer or the menu fails, the visitor gets the same message and Reload
+ * button on an otherwise empty page, where React alone would leave nothing
+ * at all.
+ *
  * @returns The header, the page for the current address and the footer.
  */
 function AppLayout() {
-	// a new key on every navigation, which clears the error boundary
+	// a new key on every navigation, which clears both error boundaries
 	const location = useLocation();
 
 	return (
-		<>
+		<RouteErrorBoundary resetKey={location.key}>
 			<SkipLink />
 			<Header />
 			<main
@@ -71,6 +78,6 @@ function AppLayout() {
 				</RouteErrorBoundary>
 			</main>
 			<Footer />
-		</>
+		</RouteErrorBoundary>
 	);
 }

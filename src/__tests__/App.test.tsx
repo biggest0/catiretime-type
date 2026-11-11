@@ -22,6 +22,18 @@ vi.mock('@/pages/HomePage', async (importOriginal) => {
 	};
 });
 
+// The same for the footer: a part of every page's frame, outside the pages.
+const footer = vi.hoisted(() => ({ crashes: false }));
+vi.mock('@/components/layout/footer/Footer', async (importOriginal) => {
+	const actual = await importOriginal<{ Footer: ComponentType }>();
+	return {
+		Footer: function FooterOrCrash() {
+			if (footer.crashes) throw new Error('render bug in the frame');
+			return <actual.Footer />;
+		},
+	};
+});
+
 /**
  * Opens the app at an address, as a visitor typing it would.
  *
@@ -44,6 +56,7 @@ beforeEach(() => {
 
 afterEach(() => {
 	homePage.crashes = false;
+	footer.crashes = false;
 	window.history.pushState({}, '', '/');
 	vi.restoreAllMocks();
 });
@@ -108,5 +121,40 @@ describe('App', () => {
 		expect(
 			screen.queryByText("This page didn't load.")
 		).not.toBeInTheDocument();
+	});
+
+	it('shows the reload message, not a blank page, when the frame crashes', () => {
+		// React and the boundary both log the caught error
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		footer.crashes = true;
+
+		openAt('/');
+
+		// the header and footer are gone with the frame, but the visitor is
+		// told what happened and can reload
+		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: 'Reload' })).toBeInTheDocument();
+	});
+
+	it('draws the frame again when the visitor goes Back after it crashed', async () => {
+		vi.spyOn(console, 'error').mockImplementation(() => {});
+		openAt('/');
+		// the frame breaks on the next page. A link, so the router gives that
+		// page its own history entry (entries pushed by hand all share one key)
+		footer.crashes = true;
+		await userEvent.click(screen.getByRole('link', { name: 'Log In' }));
+		expect(
+			await screen.findByText("This page didn't load.")
+		).toBeInTheDocument();
+		expect(screen.queryByRole('banner')).not.toBeInTheDocument();
+
+		// whatever broke the frame there isn't on the page before
+		footer.crashes = false;
+		window.history.back();
+
+		expect(await screen.findByRole('banner')).toBeInTheDocument();
+		expect(
+			screen.getByRole('heading', { level: 1, name: en.SEO.HOME.TITLE })
+		).toBeInTheDocument();
 	});
 });
