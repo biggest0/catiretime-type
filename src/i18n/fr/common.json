@@ -8,6 +8,7 @@
   },
   "NAVIGATION": {
     "HOME": "Accueil",
+    "SKIP_TO_CONTENT": "Passer au contenu principal",
     "TOGGLE_MENU": "Ouvrir le menu",
     "MENU_LABEL": "Menu de navigation"
   },

@@ -11,6 +11,7 @@ import { Sheet, SheetContent } from '@/components/ui/Sheet';
 import { APP_VERSION } from '@/config/config';
 import { useSwipeToClose } from '@/hooks/useSwipeToClose';
 import { cn } from '@/lib/utils';
+import { isFocusInPageContent } from '@/utils/a11y/pageFocus';
 
 interface MobileMenuProps {
 	isOpen: boolean;
@@ -30,7 +31,8 @@ interface MobileMenuProps {
  * @param props.isOpen - Whether the menu is showing.
  * @param props.onClose - Closes it (the close button, Escape, a swipe).
  * @param props.returnFocusRef - The menu button, which gets focus back when
- *   the menu closes.
+ *   the menu closes (unless a link in it was followed: focus is then on the
+ *   new page's heading, and stays there).
  * @returns The menu (nothing while closed).
  */
 export function MobileMenu({
@@ -46,7 +48,13 @@ export function MobileMenu({
 			<SheetContent
 				side="right"
 				showCloseButton={false}
-				finalFocus={returnFocusRef}
+				// When the menu closes, focus goes back to its button. Not after
+				// a navigation: RouteFocus has just put it on the new page's
+				// heading, and base-ui would take it back for a named element.
+				// `false` means "leave focus where it is".
+				finalFocus={() =>
+					isFocusInPageContent() ? false : returnFocusRef.current
+				}
 				// no visible title, so the label names the dialog
 				aria-label={t('NAVIGATION.MENU_LABEL')}
 				className={cn(

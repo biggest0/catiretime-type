@@ -232,6 +232,16 @@
 		outline-offset: 2px;
 	}
 
+	/*
+	 * The page's content area and its heading take focus only from code,
+	 * after a navigation or the skip link (utils/a11y/pageFocus.ts), so a
+	 * screen reader announces the page. They aren't controls: no ring.
+	 */
+	main:focus-visible,
+	main h1:focus-visible {
+		outline: none;
+	}
+
 	body {
 		font-family: var(--typeface-body);
 		color: var(--foreground-secondary);

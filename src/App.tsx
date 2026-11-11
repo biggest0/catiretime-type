@@ -5,9 +5,12 @@ import { LoadingOverlay } from '@/components/common/feedback/LoadingOverlay';
 import { RouteErrorBoundary } from '@/components/common/feedback/RouteErrorBoundary';
 import { Footer } from '@/components/layout/footer/Footer';
 import { Header } from '@/components/layout/header/Header';
+import { RouteFocus } from '@/components/layout/navigation/RouteFocus';
 import { ScrollToTop } from '@/components/layout/navigation/ScrollToTop';
+import { SkipLink } from '@/components/layout/navigation/SkipLink';
 import { PAGE_ROUTES } from '@/constants/routes';
 import HomePage from '@/pages/HomePage';
+import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
 
 // Every page except the home page loads on demand, from its own file, so a
 // visitor downloads only the pages they open. The home page stays in the
@@ -30,8 +33,9 @@ export default function App() {
 }
 
 /**
- * Every page's frame: the header, the current page and the footer. A
- * separate component because reading the location needs the router above it.
+ * Every page's frame: the skip link, the header, the current page and the
+ * footer. A separate component because reading the location needs the
+ * router above it.
  *
  * @returns The header, the page for the current address and the footer.
  */
@@ -41,9 +45,16 @@ function AppLayout() {
 
 	return (
 		<>
+			<SkipLink />
 			<Header />
-			<main className="mx-auto min-h-screen w-full max-w-[1280px] bg-background px-4 transition-colors duration-200">
+			<main
+				id={MAIN_CONTENT_ID}
+				className="mx-auto min-h-screen w-full max-w-[1280px] bg-background px-4 transition-colors duration-200"
+			>
+				{/* After a navigation: back to the top, then focus on the new
+				    page's heading */}
 				<ScrollToTop />
+				<RouteFocus />
 				{/* Outside Suspense, so it also catches a page file that fails to
 				    load: a tab left open across a deploy asks for files that are
 				    gone. */}

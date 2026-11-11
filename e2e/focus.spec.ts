@@ -4,9 +4,10 @@ import { APP_SETTING } from '../src/constants/keys';
 import { stubAnonymousVisitor } from './support/stubApi';
 
 // Keyboard users find their place by the focus ring. index.css draws one ring
-// for every link and button; these tests walk the whole page with Tab and
-// check each stop shows it, clearly enough to see (WCAG 1.4.11: 3:1 against
-// what's around it).
+// for every link and button; the first tests walk the whole page with Tab
+// and check each stop shows it, clearly enough to see (WCAG 1.4.11: 3:1
+// against what's around it). The rest follow focus across navigations: a
+// page built in the browser has to move it itself, as a page load would.
 
 /** The contrast the ring needs against the page (WCAG 1.4.11). */
 const MIN_RING_CONTRAST = 3;
@@ -130,4 +131,83 @@ test('the language menu rings the item the keyboard is on', async ({
 	await expect(current).toBeFocused();
 	await expect(current).toHaveCSS('outline-style', 'solid');
 	await expect(current).toHaveCSS('outline-width', '2px');
+});
+
+test('the skip link is the first Tab stop and jumps to the content', async ({
+	page,
+}) => {
+	await page.goto('/no-such-page');
+	// this page's code loads on demand: wait for it, as a visitor would. (Used
+	// before it has arrived, the link focuses the content area instead.)
+	await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+	const skipLink = page.getByRole('link', { name: 'Skip to main content' });
+	// parked above the top edge until it has focus
+	await expect(skipLink).not.toBeInViewport();
+
+	await page.keyboard.press('Tab');
+	await expect(skipLink).toBeFocused();
+	await expect(skipLink).toBeInViewport();
+	await page.keyboard.press('Enter');
+
+	await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+	// the address is unchanged: no "#main-content", no extra Back step
+	await expect(page).toHaveURL('/no-such-page');
+	// and Tab goes on into the page, not back through the header
+	await page.keyboard.press('Tab');
+	await expect(page.getByRole('link', { name: 'Back to home' })).toBeFocused();
+});
+
+test("a link followed by keyboard puts focus on the new page's heading", async ({
+	page,
+}) => {
+	await page.goto('/');
+	// the footer's link: before, focus stayed on it, below the window
+	await page
+		.getByRole('contentinfo')
+		.getByRole('link', { name: 'Privacy' })
+		.focus();
+
+	await page.keyboard.press('Enter');
+
+	const heading = page.getByRole('heading', {
+		level: 1,
+		name: 'This page wandered off',
+	});
+	await expect(heading).toBeFocused();
+	// a heading isn't a control: focused by the app, it shows no ring
+	await expect(heading).toHaveCSS('outline-style', 'none');
+});
+
+test("a link in the mobile menu leaves focus on the new page's heading", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 375, height: 812 });
+	await page.goto('/');
+	await page.getByRole('button', { name: 'Toggle menu' }).click();
+	const menu = page.getByRole('dialog');
+
+	await menu.getByRole('link', { name: 'Log In' }).click();
+
+	await expect(menu).toBeHidden();
+	// not back on the menu's button, where a closing menu puts focus
+	await expect(
+		page.getByRole('heading', { level: 1, name: 'This page wandered off' })
+	).toBeFocused();
+});
+
+test("a link to the page you're on scrolls back to the top", async ({
+	page,
+}) => {
+	await page.setViewportSize({ width: 1280, height: 500 });
+	await page.goto('/');
+	await page.evaluate(() => window.scrollTo(0, 400));
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(400);
+
+	// the wordmark links to the home page, which is this page
+	await page
+		.getByRole('banner')
+		.getByRole('link', { name: 'Çatire Type' })
+		.click();
+
+	await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
 });
