@@ -8,8 +8,9 @@ import { defineConfig, devices } from '@playwright/test';
  *   prod-like bundle. `npm run test:e2e` builds first; CI builds in a prior step.
  * - The backend is stubbed per test with page.route (see e2e/support), so no
  *   API server is needed, locally or in CI.
- * - Two browser engines: Chromium (Chrome, Edge) and WebKit (Safari). A new
- *   project here also needs its browser in the CI workflow's install step.
+ * - Three browser engines: Chromium (Chrome, Edge), Firefox and WebKit
+ *   (Safari). A new project here also needs its browser in the CI workflow's
+ *   install step.
  */
 export default defineConfig({
 	testDir: './e2e',
@@ -23,6 +24,7 @@ export default defineConfig({
 	},
 	projects: [
 		{ name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+		{ name: 'firefox', use: { ...devices['Desktop Firefox'] } },
 		{ name: 'webkit', use: { ...devices['Desktop Safari'] } },
 	],
 	webServer: {

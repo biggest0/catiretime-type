@@ -59,8 +59,8 @@ jobs:
         run: npm ci
 
       # the browsers listed under `projects` in playwright.config.ts
-      - name: Install Playwright browsers (Chromium, WebKit)
-        run: npx playwright install --with-deps chromium webkit
+      - name: Install Playwright browsers (Chromium, Firefox, WebKit)
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Build production bundle
         run: npm run build
