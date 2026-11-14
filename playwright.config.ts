@@ -8,6 +8,9 @@ import { defineConfig, devices } from '@playwright/test';
  *   prod-like bundle. `npm run test:e2e` builds first; CI builds in a prior step.
  * - The backend is stubbed per test with page.route (see e2e/support), so no
  *   API server is needed, locally or in CI.
+ * - The browsers ask for English (`locale`), whatever the machine's language,
+ *   so the app shows the English strings the tests look for. A test about
+ *   another language sets its own: `test.use({ locale: 'fr-CA' })`.
  * - Three browser engines: Chromium (Chrome, Edge), Firefox and WebKit
  *   (Safari). A new project here also needs its browser in the CI workflow's
  *   install step.
@@ -20,6 +23,7 @@ export default defineConfig({
 	reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : 'list',
 	use: {
 		baseURL: 'http://localhost:4174',
+		locale: 'en-US',
 		trace: 'on-first-retry',
 	},
 	projects: [
