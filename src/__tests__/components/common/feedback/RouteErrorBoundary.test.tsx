@@ -97,6 +97,29 @@ describe('RouteErrorBoundary', () => {
 		).not.toBeInTheDocument();
 	});
 
+	it('catches a page that fails as the visitor arrives once, not twice', () => {
+		const { rerender } = renderWithProviders(
+			<RouteErrorBoundary resetKey="first">
+				<p>Home</p>
+			</RouteErrorBoundary>
+		);
+
+		// a link followed to a page that crashes: the new key and the failure
+		// come in the same update
+		rerender(
+			<RouteErrorBoundary resetKey="second">
+				<BrokenPage />
+			</RouteErrorBoundary>
+		);
+
+		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
+		// the boundary logs each error it catches
+		const caught = vi
+			.mocked(console.error)
+			.mock.calls.filter(([first]) => first === 'Route failed to render');
+		expect(caught).toHaveLength(1);
+	});
+
 	it("reloads from the fallback's button", async () => {
 		renderWithProviders(
 			<RouteErrorBoundary resetKey="first">

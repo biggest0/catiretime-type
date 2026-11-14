@@ -133,9 +133,21 @@ export class RouteErrorBoundary extends Component<
 	 * the fallback until a full reload, even with working links in the header.
 	 *
 	 * @param prevProps - The props of the previous render.
+	 * @param prevState - The state of the previous render.
 	 */
-	componentDidUpdate(prevProps: RouteErrorBoundaryProps) {
-		if (this.state.failed && prevProps.resetKey !== this.props.resetKey) {
+	componentDidUpdate(
+		prevProps: RouteErrorBoundaryProps,
+		prevState: RouteErrorBoundaryState
+	) {
+		// `prevState.failed`: only a failure from before this update counts. A
+		// link followed to a page that fails brings the new key and the failure
+		// in the same update; clearing it then would render that page, and
+		// catch its error, a second time.
+		if (
+			this.state.failed &&
+			prevState.failed &&
+			prevProps.resetKey !== this.props.resetKey
+		) {
 			this.setState({ failed: false });
 		}
 	}
