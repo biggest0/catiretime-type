@@ -1,9 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
-// the real English strings, for the close button's name
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import {
 	Sheet,
 	SheetContent,
@@ -17,7 +16,7 @@ import {
  * @returns The trigger button.
  */
 function renderSheet() {
-	render(
+	renderWithProviders(
 		<Sheet>
 			<SheetTrigger>Menu</SheetTrigger>
 			<SheetContent>

@@ -1,9 +1,7 @@
-import { render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { Footer } from '@/components/layout/footer/Footer';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { PARENT_SITE, SITE_NAME, SOCIAL_PROFILES } from '@/constants/site';
@@ -14,16 +12,12 @@ afterEach(() => {
 });
 
 /**
- * Renders the footer inside a router (its privacy link needs one).
+ * Renders the footer.
  *
  * @returns The footer landmark.
  */
 function renderFooter() {
-	render(
-		<MemoryRouter>
-			<Footer />
-		</MemoryRouter>
-	);
+	renderWithProviders(<Footer />);
 	return screen.getByRole('contentinfo');
 }
 

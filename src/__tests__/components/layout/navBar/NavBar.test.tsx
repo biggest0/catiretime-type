@@ -1,13 +1,10 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { NavBar } from '@/components/layout/navBar/NavBar';
 import { APP_VERSION } from '@/config/config';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 afterEach(() => {
 	vi.restoreAllMocks();
@@ -57,14 +54,7 @@ function mockNarrowScreen(): () => void {
  * @returns The menu dialog.
  */
 async function openMenu() {
-	// the theme toggle in the menu needs the settings provider
-	render(
-		<AppSettingProvider>
-			<MemoryRouter>
-				<NavBar />
-			</MemoryRouter>
-		</AppSettingProvider>
-	);
+	renderWithProviders(<NavBar />);
 	await userEvent.click(screen.getByRole('button', { name: 'Toggle menu' }));
 	return screen.findByRole('dialog', { name: 'Navigation menu' });
 }
@@ -85,13 +75,7 @@ describe('NavBar mobile menu', () => {
 
 	it('tells screen readers that its button opens a dialog, and when', async () => {
 		mockNarrowScreen();
-		render(
-			<AppSettingProvider>
-				<MemoryRouter>
-					<NavBar />
-				</MemoryRouter>
-			</AppSettingProvider>
-		);
+		renderWithProviders(<NavBar />);
 		const menuButton = screen.getByRole('button', { name: 'Toggle menu' });
 		expect(menuButton).toHaveAttribute('aria-haspopup', 'dialog');
 		expect(menuButton).toHaveAttribute('aria-expanded', 'false');

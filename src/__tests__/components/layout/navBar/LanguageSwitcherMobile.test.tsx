@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
 // the real i18n instance: the row reads and changes its language
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import i18n from '@/i18n/config';
 import { LanguageSwitcherMobile } from '@/components/layout/navBar/LanguageSwitcherMobile';
 import { LANGUAGES } from '@/i18n/languages';
@@ -25,7 +26,7 @@ function languageButton(name: string) {
 
 describe('LanguageSwitcherMobile', () => {
 	it('keeps the folded languages away from the keyboard and screen readers', () => {
-		render(<LanguageSwitcherMobile />);
+		renderWithProviders(<LanguageSwitcherMobile />);
 
 		expect(screen.getByRole('button', { name: 'Language' })).toHaveAttribute(
 			'aria-expanded',
@@ -37,7 +38,7 @@ describe('LanguageSwitcherMobile', () => {
 	});
 
 	it('unfolds the languages, each in its own language, the current one pressed', async () => {
-		render(<LanguageSwitcherMobile />);
+		renderWithProviders(<LanguageSwitcherMobile />);
 
 		await userEvent.click(screen.getByRole('button', { name: 'Language' }));
 
@@ -56,7 +57,7 @@ describe('LanguageSwitcherMobile', () => {
 	});
 
 	it('switches the language and folds the list away', async () => {
-		render(<LanguageSwitcherMobile />);
+		renderWithProviders(<LanguageSwitcherMobile />);
 		await userEvent.click(screen.getByRole('button', { name: 'Language' }));
 
 		await userEvent.click(screen.getByRole('button', { name: 'Français' }));

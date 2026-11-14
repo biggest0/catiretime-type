@@ -1,25 +1,19 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { ThemeSelector } from '@/components/common/theme/ThemeSelector';
 import { APP_SETTING } from '@/constants/keys';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 afterEach(() => {
 	localStorage.clear();
 	document.documentElement.classList.remove('dark');
 });
 
-/** Renders the selector inside the settings provider (the test OS is light). */
+/** Renders the selector (the test OS is light). */
 function renderSelector() {
-	render(
-		<AppSettingProvider>
-			<ThemeSelector />
-		</AppSettingProvider>
-	);
+	renderWithProviders(<ThemeSelector />);
 }
 
 /**

@@ -1,22 +1,12 @@
-import { render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { Header } from '@/components/layout/header/Header';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 describe('Header', () => {
 	it("is the page's banner, with one navigation area: the section links", () => {
-		// the theme toggle in the header needs the settings provider
-		render(
-			<AppSettingProvider>
-				<MemoryRouter>
-					<Header />
-				</MemoryRouter>
-			</AppSettingProvider>
-		);
+		renderWithProviders(<Header />);
 
 		const banner = screen.getByRole('banner');
 		// two unnamed navigation areas couldn't be told apart (backport K36)

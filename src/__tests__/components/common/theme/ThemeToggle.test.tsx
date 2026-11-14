@@ -1,25 +1,19 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { ThemeToggle } from '@/components/common/theme/ThemeToggle';
 import { APP_SETTING } from '@/constants/keys';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 afterEach(() => {
 	localStorage.clear();
 	document.documentElement.classList.remove('dark');
 });
 
-/** Renders the toggle inside the settings provider (the test OS is light). */
+/** Renders the toggle (the test OS is light). */
 function renderToggle() {
-	render(
-		<AppSettingProvider>
-			<ThemeToggle />
-		</AppSettingProvider>
-	);
+	renderWithProviders(<ThemeToggle />);
 }
 
 describe('ThemeToggle', () => {

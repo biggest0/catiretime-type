@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the fallback
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { RouteErrorBoundary } from '@/components/common/feedback/RouteErrorBoundary';
 import { ROUTE_RELOAD_ATTEMPTED } from '@/constants/keys';
 
@@ -30,7 +29,7 @@ function StalePage(): ReactNode {
  * @param page - The page element to render.
  */
 function visit(page: ReactNode) {
-	render(
+	renderWithProviders(
 		<RouteErrorBoundary resetKey="first">{page}</RouteErrorBoundary>
 	).unmount();
 }
@@ -57,7 +56,7 @@ afterEach(() => {
 
 describe('RouteErrorBoundary', () => {
 	it('renders the page when nothing fails', () => {
-		render(
+		renderWithProviders(
 			<RouteErrorBoundary resetKey="first">
 				<p>Home</p>
 			</RouteErrorBoundary>
@@ -67,7 +66,7 @@ describe('RouteErrorBoundary', () => {
 	});
 
 	it('shows the fallback for an ordinary error, without reloading', () => {
-		render(
+		renderWithProviders(
 			<RouteErrorBoundary resetKey="first">
 				<BrokenPage />
 			</RouteErrorBoundary>
@@ -78,7 +77,7 @@ describe('RouteErrorBoundary', () => {
 	});
 
 	it('renders the next page after a navigation, not the fallback', () => {
-		const { rerender } = render(
+		const { rerender } = renderWithProviders(
 			<RouteErrorBoundary resetKey="first">
 				<BrokenPage />
 			</RouteErrorBoundary>
@@ -99,7 +98,7 @@ describe('RouteErrorBoundary', () => {
 	});
 
 	it("reloads from the fallback's button", async () => {
-		render(
+		renderWithProviders(
 			<RouteErrorBoundary resetKey="first">
 				<BrokenPage />
 			</RouteErrorBoundary>
@@ -134,7 +133,7 @@ describe('RouteErrorBoundary', () => {
 			throw new DOMException('The operation is insecure.', 'SecurityError');
 		});
 
-		render(
+		renderWithProviders(
 			<RouteErrorBoundary resetKey="first">
 				<StalePage />
 			</RouteErrorBoundary>

@@ -1,14 +1,12 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the status text
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { LoadingOverlay } from '@/components/common/feedback/LoadingOverlay';
 import { APP_SETTING } from '@/constants/keys';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 
 /**
- * Renders the overlay inside the settings provider, with a saved theme.
+ * Renders the overlay for a visitor with a saved theme.
  *
  * @param themeMode - The saved theme.
  * @param loading - The overlay's `loading` prop.
@@ -16,15 +14,11 @@ import { AppSettingProvider } from '@/contexts/AppSettingProvider';
  */
 function renderOverlay(themeMode: 'light' | 'dark', loading = true) {
 	localStorage.setItem(APP_SETTING, JSON.stringify({ themeMode }));
-	const ui = (isLoading: boolean) => (
-		<AppSettingProvider>
-			<LoadingOverlay loading={isLoading} />
-		</AppSettingProvider>
-	);
-	const result = render(ui(loading));
+	const result = renderWithProviders(<LoadingOverlay loading={loading} />);
 	return {
 		...result,
-		setLoading: (next: boolean) => result.rerender(ui(next)),
+		setLoading: (next: boolean) =>
+			result.rerender(<LoadingOverlay loading={next} />),
 	};
 }
 

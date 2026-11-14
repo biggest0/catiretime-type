@@ -1,8 +1,7 @@
-import { render } from '@testing-library/react';
 import type { ReactElement } from 'react';
-import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { PageMeta } from '@/components/common/seo/PageMeta';
 import { SITE_URL } from '@/config/config';
 import { SITE_NAME } from '@/constants/site';
@@ -47,7 +46,7 @@ function headValues(selector: string) {
  * @returns RTL's render result.
  */
 function renderAt(ui: ReactElement, url = '/') {
-	return render(<MemoryRouter initialEntries={[url]}>{ui}</MemoryRouter>);
+	return renderWithProviders(ui, { route: url });
 }
 
 beforeEach(() => {
@@ -86,11 +85,7 @@ describe('PageMeta', () => {
 		);
 		expect(headValue('meta[name="description"]')).toBe('Your account.');
 
-		rerender(
-			<MemoryRouter>
-				<PageMeta title="Account" />
-			</MemoryRouter>
-		);
+		rerender(<PageMeta title="Account" />);
 		expect(headValue('meta[name="description"]')).toBe(en.SEO.HOME.DESCRIPTION);
 	});
 

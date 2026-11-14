@@ -1,14 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import {
-	Link,
-	MemoryRouter,
-	Route,
-	Routes,
-	useNavigate,
-} from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { ScrollToTop } from '@/components/layout/navigation/ScrollToTop';
 
 /** A second page with a Back button, like the browser's. */
@@ -34,14 +29,14 @@ function LongPage() {
 
 /** Renders two pages and `ScrollToTop`, starting on the first. */
 function renderPages() {
-	render(
-		<MemoryRouter>
+	renderWithProviders(
+		<>
 			<ScrollToTop />
 			<Routes>
 				<Route path="/" element={<Link to="/long">Open the long page</Link>} />
 				<Route path="/long" element={<LongPage />} />
 			</Routes>
-		</MemoryRouter>
+		</>
 	);
 }
 

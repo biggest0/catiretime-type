@@ -1,9 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { SectionBar } from '@/components/layout/header/SectionBar';
 import { NAV_SECTIONS } from '@/constants/navigation';
 import { PAGE_ROUTES } from '@/constants/routes';
@@ -14,11 +12,7 @@ import { PAGE_ROUTES } from '@/constants/routes';
  * @param path - The address of the page.
  */
 function renderAt(path: string) {
-	render(
-		<MemoryRouter initialEntries={[path]}>
-			<SectionBar />
-		</MemoryRouter>
-	);
+	renderWithProviders(<SectionBar />, { route: path });
 }
 
 describe('SectionBar', () => {

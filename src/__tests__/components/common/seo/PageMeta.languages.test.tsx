@@ -1,7 +1,6 @@
-import { render } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { PageMeta } from '@/components/common/seo/PageMeta';
 import i18n from '@/i18n/config';
 // the real index.html, so the tests edit the tags the app actually ships
@@ -49,11 +48,7 @@ afterEach(async () => {
 describe('PageMeta with three languages', () => {
 	it('tags the page with its language and lists every other one', async () => {
 		await i18n.changeLanguage('fr');
-		render(
-			<MemoryRouter>
-				<PageMeta title="Compte" />
-			</MemoryRouter>
-		);
+		renderWithProviders(<PageMeta title="Compte" />);
 
 		expect(localeTags()).toEqual({
 			locale: ['fr_CA'],
@@ -63,18 +58,10 @@ describe('PageMeta with three languages', () => {
 
 	it('updates the tags when the language changes, without leftovers', async () => {
 		await i18n.changeLanguage('fr');
-		const { rerender } = render(
-			<MemoryRouter>
-				<PageMeta title="Compte" />
-			</MemoryRouter>
-		);
+		const { rerender } = renderWithProviders(<PageMeta title="Compte" />);
 
 		await i18n.changeLanguage('en');
-		rerender(
-			<MemoryRouter>
-				<PageMeta title="Account" />
-			</MemoryRouter>
-		);
+		rerender(<PageMeta title="Account" />);
 
 		expect(localeTags()).toEqual({
 			locale: ['en_CA'],

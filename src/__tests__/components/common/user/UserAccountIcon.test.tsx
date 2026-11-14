@@ -1,9 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the labels
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { UserAccountIcon } from '@/components/common/user/UserAccountIcon';
 import { PAGE_ROUTES } from '@/constants/routes';
 import { useAuth } from '@/hooks/useAuth';
@@ -27,11 +25,7 @@ function renderAs(isAuthenticated: boolean, variant?: 'icon' | 'full') {
 		loginWithGoogle: vi.fn(),
 		logout: vi.fn(),
 	});
-	render(
-		<MemoryRouter>
-			<UserAccountIcon variant={variant} />
-		</MemoryRouter>
-	);
+	renderWithProviders(<UserAccountIcon variant={variant} />);
 }
 
 describe('UserAccountIcon', () => {

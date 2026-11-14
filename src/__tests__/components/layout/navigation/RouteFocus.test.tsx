@@ -1,13 +1,11 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Link, MemoryRouter, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the app's pages
-import '@/i18n/config';
-import App from '@/App';
+import { renderApp } from '@/__tests__/helpers/renderApp';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { RouteFocus } from '@/components/layout/navigation/RouteFocus';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
 
 /**
@@ -15,8 +13,8 @@ import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
  * (as the header's and footer's are), then `<main>` with two pages.
  */
 function renderPages() {
-	render(
-		<MemoryRouter>
+	renderWithProviders(
+		<>
 			<Link to="/account">To the account page</Link>
 			<Link to="/loading">To a page still loading</Link>
 			<main id={MAIN_CONTENT_ID}>
@@ -28,7 +26,7 @@ function renderPages() {
 					<Route path="/loading" element={<p>Loading…</p>} />
 				</Routes>
 			</main>
-		</MemoryRouter>
+		</>
 	);
 }
 
@@ -64,13 +62,7 @@ describe('RouteFocus in the app', () => {
 	beforeEach(() => {
 		// jsdom doesn't scroll; ScrollToTop calls this after each navigation
 		vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
-		window.history.pushState({}, '', '/');
-		// the header's theme toggle needs the settings provider
-		render(
-			<AppSettingProvider>
-				<App />
-			</AppSettingProvider>
-		);
+		renderApp('/');
 	});
 
 	afterEach(() => {

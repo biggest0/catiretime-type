@@ -1,12 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ComponentType } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// the real English strings for the pages
-import '@/i18n/config';
-import App from '@/App';
-import { AppSettingProvider } from '@/contexts/AppSettingProvider';
+import { renderApp } from '@/__tests__/helpers/renderApp';
 import en from '@/i18n/en/common.json';
 
 // Lets one test make the home page crash, as a bug would. The flag is
@@ -34,21 +31,6 @@ vi.mock('@/components/layout/footer/Footer', async (importOriginal) => {
 	};
 });
 
-/**
- * Opens the app at an address, as a visitor typing it would.
- *
- * @param path - The address to open.
- */
-function openAt(path: string) {
-	window.history.pushState({}, '', path);
-	// the header's theme toggle needs the settings provider
-	render(
-		<AppSettingProvider>
-			<App />
-		</AppSettingProvider>
-	);
-}
-
 beforeEach(() => {
 	// jsdom doesn't scroll; ScrollToTop calls this after each navigation
 	vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
@@ -63,7 +45,7 @@ afterEach(() => {
 
 describe('App', () => {
 	it('shows the home page, between the header and the footer', () => {
-		openAt('/');
+		renderApp('/');
 
 		expect(
 			screen.getByRole('heading', { level: 1, name: en.SEO.HOME.TITLE })
@@ -74,7 +56,7 @@ describe('App', () => {
 	});
 
 	it('loads the account page on demand', async () => {
-		openAt('/account');
+		renderApp('/account');
 
 		expect(
 			await screen.findByRole('heading', {
@@ -85,7 +67,7 @@ describe('App', () => {
 	});
 
 	it('shows the not-found page for an unknown address, with a way home', async () => {
-		openAt('/no-such-page');
+		renderApp('/no-such-page');
 
 		expect(
 			await screen.findByRole('heading', {
@@ -105,7 +87,7 @@ describe('App', () => {
 		// React and the boundary both log the caught error
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 		homePage.crashes = true;
-		openAt('/');
+		renderApp('/');
 		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
 
 		// signed out, the header's account icon links to the login page, which
@@ -128,7 +110,7 @@ describe('App', () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 		footer.crashes = true;
 
-		openAt('/');
+		renderApp('/');
 
 		// the header and footer are gone with the frame, but the visitor is
 		// told what happened and can reload
@@ -138,7 +120,7 @@ describe('App', () => {
 
 	it('draws the frame again when the visitor goes Back after it crashed', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
-		openAt('/');
+		renderApp('/');
 		// the frame breaks on the next page. A link, so the router gives that
 		// page its own history entry (entries pushed by hand all share one key)
 		footer.crashes = true;

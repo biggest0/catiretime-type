@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it } from 'vitest';
 
 // the real i18n instance: the menu reads and changes its language
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import i18n from '@/i18n/config';
 import { LanguageSwitcherDesktop } from '@/components/layout/navBar/LanguageSwitcherDesktop';
 import { LANGUAGES } from '@/i18n/languages';
@@ -19,7 +20,7 @@ afterEach(async () => {
  * @returns The menu's language options, in order.
  */
 async function openMenu() {
-	render(<LanguageSwitcherDesktop />);
+	renderWithProviders(<LanguageSwitcherDesktop />);
 	await userEvent.click(screen.getByRole('button', { name: 'Language' }));
 	// a mouse press opens the menu on the next animation frame
 	return screen.findAllByRole('menuitemradio');

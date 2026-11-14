@@ -1,15 +1,14 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
-// the real English strings for the label
-import '@/i18n/config';
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import { SkipLink } from '@/components/layout/navigation/SkipLink';
 import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
 
 describe('SkipLink', () => {
 	it("moves focus to the page's heading, without changing the address", async () => {
-		render(
+		renderWithProviders(
 			<>
 				<SkipLink />
 				<a href="/somewhere">A header link</a>
@@ -30,7 +29,7 @@ describe('SkipLink', () => {
 	});
 
 	it('is the first Tab stop', async () => {
-		render(
+		renderWithProviders(
 			<>
 				<SkipLink />
 				<a href="/somewhere">A header link</a>
