@@ -48,7 +48,8 @@ describe('Sheet', () => {
 		await waitFor(() =>
 			expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 		);
-		expect(trigger).toHaveFocus();
+		// focus comes back a moment after the sheet has gone
+		await waitFor(() => expect(trigger).toHaveFocus());
 	});
 
 	it('closes on Escape', async () => {

@@ -65,6 +65,7 @@ describe('DropdownMenu', () => {
 		await waitFor(() =>
 			expect(screen.queryByRole('menu')).not.toBeInTheDocument()
 		);
-		expect(trigger).toHaveFocus();
+		// focus comes back a moment after the menu has gone
+		await waitFor(() => expect(trigger).toHaveFocus());
 	});
 });

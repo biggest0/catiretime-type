@@ -74,12 +74,12 @@ describe('RouteFocus in the app', () => {
 		// the footer's link: before, focus stayed on it, far down the page
 		await userEvent.click(screen.getByRole('link', { name: 'Privacy' }));
 
-		expect(
-			await screen.findByRole('heading', {
-				level: 1,
-				name: 'This page wandered off',
-			})
-		).toHaveFocus();
+		const heading = await screen.findByRole('heading', {
+			level: 1,
+			name: 'This page wandered off',
+		});
+		// focus moves a moment after the heading is on the page
+		await waitFor(() => expect(heading).toHaveFocus());
 	});
 
 	it("leaves focus on the new page's heading after a link in the mobile menu", async () => {
@@ -96,6 +96,6 @@ describe('RouteFocus in the app', () => {
 			expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 		);
 		// not back on the menu's button, where the closing menu would put it
-		expect(heading).toHaveFocus();
+		await waitFor(() => expect(heading).toHaveFocus());
 	});
 });

@@ -110,7 +110,10 @@ describe('NavBar mobile menu', () => {
 		await waitFor(() =>
 			expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
 		);
-		expect(screen.getByRole('button', { name: 'Toggle menu' })).toHaveFocus();
+		// focus comes back a moment after the menu has gone
+		await waitFor(() =>
+			expect(screen.getByRole('button', { name: 'Toggle menu' })).toHaveFocus()
+		);
 	});
 
 	it('closes when the screen widens to md', async () => {
