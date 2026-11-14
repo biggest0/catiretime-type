@@ -15,6 +15,7 @@ const RELOAD_COOLDOWN_MS = 60_000;
  * longer on the server". Browsers word it differently: Chrome says "Failed
  * to fetch dynamically imported module", Safari "Importing a module script
  * failed", Firefox "error loading dynamically imported module".
+ * e2e/stalePage.spec.ts checks all three against the real browsers.
  *
  * @param error - What was thrown.
  * @returns `true` for a missing page file.
@@ -73,9 +74,10 @@ interface RouteErrorBoundaryState {
  *
  * Each deploy replaces the site's files, so a tab left open across a deploy
  * asks for page files that no longer exist. Reloading fetches the new ones,
- * so for that error it reloads by itself, at most once a minute. Any other
- * error keeps the app's frame and shows `RouteErrorFallback`, until the
- * visitor goes to another page: then it renders the new page again.
+ * so for that error it reloads by itself, at most once a minute, and never
+ * while the device is offline (the same error, but a reload can't help). Any
+ * other error keeps the app's frame and shows `RouteErrorFallback`, until
+ * the visitor goes to another page: then it renders the new page again.
  *
  * @param props.children - The page to protect.
  * @param props.resetKey - A value that changes on every navigation (the
@@ -108,6 +110,12 @@ export class RouteErrorBoundary extends Component<
 		console.error('Route failed to render', error, info.componentStack);
 
 		if (!isStaleChunkError(error)) return;
+
+		// With no network the file isn't missing, just out of reach, and a
+		// reload would swap the app for the browser's "no internet" page. The
+		// fallback keeps the header and the loaded pages in reach; its button
+		// reloads when the visitor is back online.
+		if (!navigator.onLine) return;
 
 		// Without storage there's no guard against a reload loop, so the
 		// fallback's button leaves the reload to the visitor. This code must not

@@ -144,6 +144,21 @@ describe('RouteErrorBoundary', () => {
 		expect(sessionStorage.length).toBe(0);
 	});
 
+	it('shows the fallback, without reloading, when the device is offline', () => {
+		vi.spyOn(navigator, 'onLine', 'get').mockReturnValue(false);
+
+		renderWithProviders(
+			<RouteErrorBoundary resetKey="first">
+				<StalePage />
+			</RouteErrorBoundary>
+		);
+
+		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
+		expect(reload).not.toHaveBeenCalled();
+		// nothing saved either: the one reload is still there for later
+		expect(sessionStorage.length).toBe(0);
+	});
+
 	it('saves when it reloaded under its storage key', () => {
 		vi.spyOn(Date, 'now').mockReturnValue(1_234_567);
 
