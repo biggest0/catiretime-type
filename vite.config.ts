@@ -86,5 +86,10 @@ export default defineConfig({
 		environment: 'jsdom',
 		include: ['src/__tests__/**/*.test.{ts,tsx}'],
 		setupFiles: ['src/__tests__/setup.ts'],
+		// Vitest replaces every CSS file with an empty string, since components
+		// don't need styles to be tested. A stylesheet imported as text
+		// (`?raw`) keeps its content: tokenContrast.test.ts reads the colour
+		// tokens from index.css.
+		css: { include: /\.css\?raw$/ },
 	},
 });

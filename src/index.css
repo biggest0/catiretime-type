@@ -63,7 +63,7 @@
 	--muted-foreground: #6b7280; /* gray-500 | dates, captions, metadata, icons */
 	--section-label: #92400e; /* amber-800 | section labels and page titles; deliberately not --brand, which reads as "interactive" */
 	--disabled: #d1d5db; /* gray-300 | disabled text and input borders */
-	--placeholder: #9ca3af; /* gray-400 | input placeholder text */
+	--placeholder: #6b7280; /* gray-500 | input placeholder text: it's text, so 4.5:1 (4.8:1 on white; gray-400 was 2.5:1) */
 
 	/* brand amber */
 	--brand: #b45309; /* amber-700 | interactive text and links (4.9:1 on white, WCAG AA) */
@@ -83,12 +83,12 @@
 	/* borders */
 	--border: #9ca3af; /* gray-400 | standard dividers */
 	--border-subtle: #e5e7eb; /* gray-200 | light dividers (sections, nav, footer) */
-	--input: #d1d5db; /* gray-300 | form-control borders */
+	--input: #6b7280; /* gray-500 | form-control borders: the border is what shows where a field is, so 3:1 (4.8:1; gray-300 was 1.5:1) */
 	--ring: #b45309; /* amber-700 | keyboard focus ring: 5.0:1 on the page, 4.6:1 on a highlighted menu item (WCAG asks 3:1) */
 
 	/* status */
 	--destructive: #dc2626; /* red-600 | errors */
-	--success: #16a34a; /* green-600 | success messages */
+	--success: #15803d; /* green-700 | success messages (5.0:1 on white; green-600 was 3.3:1) */
 	--warning: #a16207; /* yellow-700 | warning text */
 	--warning-subtle: #fef9c3; /* yellow-100 | warning surface */
 	--warning-border: #eab308; /* yellow-500 | warning border */
@@ -123,7 +123,7 @@
 	--muted-foreground: #94a3b8; /* slate-400 */
 	--section-label: #f59e0b; /* amber-500, a step off --brand so labels and links stay distinguishable */
 	--disabled: #475569; /* slate-600 */
-	--placeholder: #64748b; /* slate-500 */
+	--placeholder: #94a3b8; /* slate-400 | 7.0:1 on the page, 5.7:1 on a card (slate-500 was 3.1:1 there) */
 
 	/* brand amber */
 	--brand: #fbbf24; /* amber-400 */
@@ -143,7 +143,7 @@
 	/* borders */
 	--border: #475569; /* slate-600 */
 	--border-subtle: #334155; /* slate-700 */
-	--input: #475569; /* slate-600 */
+	--input: #64748b; /* slate-500 | 3.8:1 on the page, 3.1:1 on a card (slate-600 was 1.9:1 there) */
 	--ring: #fbbf24; /* amber-400 | 10.7:1 on the page, 6.2:1 on a highlighted menu item */
 
 	/* status */
