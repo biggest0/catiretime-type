@@ -88,7 +88,7 @@ function setLinkTag(rel: string, href: string) {
  * `<meta>`: React 19 would add second copies (a second title, and a second
  * description placed after the site default, which then comes first).
  *
- * @param props.title - The page's own title; `| Çatire Type` is added.
+ * @param props.title - The page's own title; ` | ` and `SITE_NAME` are added.
  * @param props.description - The page's description. Defaults to the home
  *   page's (`SEO.HOME.DESCRIPTION`), so a page never keeps the previous
  *   page's.

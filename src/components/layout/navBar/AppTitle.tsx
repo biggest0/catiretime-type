@@ -14,8 +14,8 @@ interface AppTitleProps {
 }
 
 /**
- * The wordmark ("ÇATIRE TYPE"), a link home as readers expect a masthead to
- * be; `AppLogo`'s house icon is the other, icon-only way home.
+ * The wordmark (`SITE_NAME` in capitals), a link home as readers expect a
+ * masthead to be; `AppLogo`'s house icon is the other, icon-only way home.
  *
  * @param props.variant - `desktop` (default) is centred on the whole header
  *   row and grows on wide screens; `mobile` is smaller and sits in the row.
