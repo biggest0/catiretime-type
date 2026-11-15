@@ -19,6 +19,13 @@ export const UI_LANGUAGE = 'i18nextLng';
 // sessionStorage keys: one value per tab, cleared when the tab closes.
 
 /**
+ * The random value sent along with a Google sign-in. The page Google returns
+ * to compares it with what comes back, so a return nobody started here is
+ * refused.
+ */
+export const GOOGLE_OAUTH_STATE = 'google_oauth_state';
+
+/**
  * When this tab last reloaded itself to replace page files a deploy removed
  * (`RouteErrorBoundary`), so it never reloads in a loop.
  */

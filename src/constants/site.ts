@@ -1,6 +1,7 @@
 /**
- * The app's identity. An app built from this one changes `SITE_NAME`; the
- * Çatire links (`PARENT_SITE`, `SOCIAL_PROFILES`) are shared by every app.
+ * The app's identity. An app built from this one changes `SITE_NAME` and
+ * `APP_ID`; the Çatire links (`PARENT_SITE`, `SOCIAL_PROFILES`) are shared
+ * by every app.
  *
  * `index.html` can't import this module, so its `<title>` and `og:` tags hold
  * copies of `SITE_NAME`: change a value here, then there.
@@ -8,6 +9,13 @@
 
 /** The app's name. A brand name, so it is the same in every UI language. */
 export const SITE_NAME = 'Çatire Type';
+
+/**
+ * The short id the backend knows this app by. It starts the Google sign-in
+ * state, so the backend returns the visitor to this app and not another
+ * Çatire app. Lowercase letters only; the backend holds the matching entry.
+ */
+export const APP_ID = 'type';
 
 /** Çatire Time, the site this app belongs to. The footer links to it. */
 export const PARENT_SITE = {

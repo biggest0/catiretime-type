@@ -5,6 +5,15 @@
 export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 /**
+ * Google sign-in: the app's OAuth client id, and the address Google sends
+ * the visitor back to (the backend's callback, not this app). Both empty
+ * when the env file doesn't set them; the app then offers no Google sign-in.
+ */
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+export const GOOGLE_REDIRECT_URI =
+	import.meta.env.VITE_GOOGLE_REDIRECT_URI || '';
+
+/**
  * App version, injected at build time from package.json (vite `define`), so
  * package.json stays the single source of truth. The fallback covers any
  * context where the define isn't applied.
