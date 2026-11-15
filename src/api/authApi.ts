@@ -1,5 +1,5 @@
 import { API_URL } from '@/config/config';
-import type { AuthResponse, Credentials } from '@/types/authTypes';
+import type { AuthResponse, AuthUser, Credentials } from '@/types/authTypes';
 
 /**
  * Thrown when an auth endpoint answers with an error status. `status` tells
@@ -72,6 +72,52 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
 }
 
 /**
+ * Checks that a value has the shape of a user.
+ *
+ * @param value - Something from outside the app: the server's answer, or
+ *   what was found in storage.
+ * @returns `true` for an object with a string `id` and `email`.
+ */
+export function isAuthUser(value: unknown): value is AuthUser {
+	return (
+		typeof value === 'object' &&
+		value !== null &&
+		'id' in value &&
+		typeof value.id === 'string' &&
+		'email' in value &&
+		typeof value.email === 'string'
+	);
+}
+
+/**
+ * Posts to an endpoint that answers with the signed-in user, and checks the
+ * answer holds one. The session store signs in whoever this returns, so an
+ * answer without a user must not pass for a sign-in.
+ *
+ * @param path - The endpoint's path under API_URL.
+ * @param body - The JSON body to send; omit it for endpoints that take none.
+ * @returns The answer, holding a user.
+ * @throws ApiError when the server answers with an error status; a plain
+ * Error when it answers 200 with no usable user (not an ApiError: the
+ * server didn't refuse anything).
+ */
+async function postForUser(
+	path: string,
+	body?: unknown
+): Promise<AuthResponse> {
+	const answer = await post<unknown>(path, body);
+	if (
+		typeof answer === 'object' &&
+		answer !== null &&
+		'user' in answer &&
+		isAuthUser(answer.user)
+	) {
+		return { user: answer.user };
+	}
+	throw new Error(`The answer from ${path} holds no user`);
+}
+
+/**
  * Creates an account and signs it in. It stays unverified until the emailed
  * link is opened.
  *
@@ -81,7 +127,7 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
  * already has an account.
  */
 export function postRegister(credentials: Credentials): Promise<AuthResponse> {
-	return post<AuthResponse>('/auth/user/register', credentials);
+	return postForUser('/auth/user/register', credentials);
 }
 
 /**
@@ -92,7 +138,7 @@ export function postRegister(credentials: Credentials): Promise<AuthResponse> {
  * @throws ApiError 401 for a wrong email or password.
  */
 export function postLogin(credentials: Credentials): Promise<AuthResponse> {
-	return post<AuthResponse>('/auth/user/login', credentials);
+	return postForUser('/auth/user/login', credentials);
 }
 
 /**
@@ -102,7 +148,7 @@ export function postLogin(credentials: Credentials): Promise<AuthResponse> {
  * @throws ApiError 401 when there's no valid session.
  */
 export function postRefreshToken(): Promise<AuthResponse> {
-	return post<AuthResponse>('/auth/user/refresh');
+	return postForUser('/auth/user/refresh');
 }
 
 /**
@@ -115,7 +161,7 @@ export function postRefreshToken(): Promise<AuthResponse> {
  * attempts.
  */
 export function postGoogleExchange(loginCode: string): Promise<AuthResponse> {
-	return post<AuthResponse>('/auth/user/google/exchange', { loginCode });
+	return postForUser('/auth/user/google/exchange', { loginCode });
 }
 
 /** Ends the session on the server, which also clears its cookies. */

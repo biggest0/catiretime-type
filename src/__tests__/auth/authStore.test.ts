@@ -193,6 +193,33 @@ describe('authStore.refresh', () => {
 		expect(authStore.getState()).toMatchObject({ user, isAuthenticated: true });
 		expect(localStorage.getItem(AUTH_USER)).not.toBeNull();
 	});
+
+	it('signs nobody in when a successful answer holds no user', async () => {
+		const authStore = await loadStore();
+		vi.spyOn(globalThis, 'fetch').mockImplementation(() =>
+			Promise.resolve(jsonResponse({}, 200))
+		);
+
+		expect(await authStore.refresh()).toBe(false);
+		expect(authStore.getState()).toMatchObject({
+			user: null,
+			isAuthenticated: false,
+		});
+		expect(localStorage.getItem(AUTH_USER)).toBeNull();
+	});
+
+	it('keeps the signed-in user when a successful answer holds no user', async () => {
+		saveUser(user);
+		const authStore = await loadStore();
+		vi.spyOn(globalThis, 'fetch').mockImplementation(() =>
+			Promise.resolve(jsonResponse({ user: { name: 'cat' } }, 200))
+		);
+
+		// not a "no session" answer, so nothing is known about the session
+		expect(await authStore.refresh()).toBe(false);
+		expect(authStore.getState()).toMatchObject({ user, isAuthenticated: true });
+		expect(localStorage.getItem(AUTH_USER)).toBe(JSON.stringify(user));
+	});
 });
 
 describe('authStore.bootstrap', () => {

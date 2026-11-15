@@ -1,5 +1,6 @@
 import {
 	ApiError,
+	isAuthUser,
 	postGoogleExchange,
 	postLogin,
 	postLogout,
@@ -23,23 +24,6 @@ export interface AuthState {
 	isAuthenticated: boolean;
 	/** True until the startup check has answered: don't decide anything yet. */
 	isLoading: boolean;
-}
-
-/**
- * Checks that a value has the shape of a user.
- *
- * @param value - Whatever was found in storage.
- * @returns `true` for an object with a string `id` and `email`.
- */
-function isAuthUser(value: unknown): value is AuthUser {
-	return (
-		typeof value === 'object' &&
-		value !== null &&
-		'id' in value &&
-		typeof value.id === 'string' &&
-		'email' in value &&
-		typeof value.email === 'string'
-	);
 }
 
 /**
@@ -140,8 +124,9 @@ async function performRefresh(): Promise<boolean> {
 		signIn(user);
 		return true;
 	} catch (error) {
-		// only a 401 means "no session". Offline or a server error says
-		// nothing about the session, so the visitor stays signed in
+		// only a 401 means "no session". Offline, a server error or an
+		// answer without a user says nothing about the session, so the
+		// visitor stays as they were
 		if (error instanceof ApiError && error.status === 401) signOut();
 		return false;
 	}
@@ -264,7 +249,10 @@ function subscribe(listener: () => void): () => void {
 	};
 }
 
-/** The one session store, shared by components (through useAuth) and the API layer. */
+/**
+ * The one session store, shared by components (through useAuth) and the
+ * API layer.
+ */
 export const authStore = {
 	getState,
 	subscribe,

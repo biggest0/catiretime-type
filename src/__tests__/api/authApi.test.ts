@@ -95,4 +95,16 @@ describe('authApi', () => {
 
 		await expect(postLogout()).rejects.toThrow(TypeError);
 	});
+
+	it.each([
+		['no user at all', {}],
+		['a user without an id or email', { user: { name: 'cat' } }],
+		['something that is not an object', 'ok'],
+	])('rejects a successful answer holding %s', async (_label, body) => {
+		stubFetch(jsonResponse(body, 200));
+
+		// not an ApiError: the server didn't refuse, its answer is unusable
+		await expect(postRefreshToken()).rejects.toThrow(/user/);
+		await expect(postRefreshToken()).rejects.not.toHaveProperty('status');
+	});
 });
