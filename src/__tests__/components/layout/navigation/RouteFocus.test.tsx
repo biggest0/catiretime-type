@@ -90,7 +90,7 @@ describe('RouteFocus in the app', () => {
 
 		const heading = await screen.findByRole('heading', {
 			level: 1,
-			name: 'This page wandered off',
+			name: 'Log in',
 		});
 		await waitFor(() =>
 			expect(screen.queryByRole('dialog')).not.toBeInTheDocument()

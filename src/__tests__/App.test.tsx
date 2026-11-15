@@ -90,14 +90,13 @@ describe('App', () => {
 		renderApp('/');
 		expect(screen.getByText("This page didn't load.")).toBeInTheDocument();
 
-		// signed out, the header's account icon links to the login page, which
-		// shows the not-found page until the auth pages exist
+		// signed out, the header's account icon links to the login page
 		await userEvent.click(screen.getByRole('link', { name: 'Log In' }));
 
 		expect(
 			await screen.findByRole('heading', {
 				level: 1,
-				name: 'This page wandered off',
+				name: en.PAGES.LOGIN.TITLE,
 			})
 		).toBeInTheDocument();
 		expect(

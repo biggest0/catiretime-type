@@ -197,7 +197,7 @@ test("a link in the mobile menu leaves focus on the new page's heading", async (
 	await expect(menu).toBeHidden();
 	// not back on the menu's button, where a closing menu puts focus
 	await expect(
-		page.getByRole('heading', { level: 1, name: 'This page wandered off' })
+		page.getByRole('heading', { level: 1, name: 'Log in' })
 	).toBeFocused();
 });
 

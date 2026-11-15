@@ -23,6 +23,17 @@
   },
   "AUTH": {
     "LOGIN": "Se connecter",
+    "EMAIL": "Courriel",
+    "PASSWORD": "Mot de passe",
+    "LOGGING_IN": "Connexion en cours...",
+    "EMAIL_REQUIRED": "Entrez votre courriel.",
+    "PASSWORD_REQUIRED": "Entrez votre mot de passe.",
+    "OR": "ou",
+    "SIGN_IN_GOOGLE": "Se connecter avec Google",
+    "GOOGLE_FAILED": "La connexion avec Google a échoué. Veuillez réessayer.",
+    "FORGOT_PASSWORD": "Mot de passe oublié ?",
+    "NO_ACCOUNT": "Vous n'avez pas de compte ?",
+    "REGISTER": "S'inscrire",
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
     "INVALID_CREDENTIALS": "Courriel ou mot de passe incorrect.",
     "EMAIL_IN_USE": "Un compte existe déjà avec ce courriel.",
@@ -41,6 +52,9 @@
     },
     "ACCOUNT": {
       "TITLE": "Compte"
+    },
+    "LOGIN": {
+      "TITLE": "Connexion"
     }
   },
   "SEO": {
@@ -54,6 +68,9 @@
     },
     "ACCOUNT": {
       "TITLE": "Compte"
+    },
+    "LOGIN": {
+      "TITLE": "Connexion"
     }
   }
 }

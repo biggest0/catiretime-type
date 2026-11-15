@@ -33,3 +33,25 @@ export async function stubSignedInVisitor(page: Page): Promise<void> {
 		route.fulfill({ status: 200, json: { user: TEST_USER } })
 	);
 }
+
+/**
+ * Answers the sign-in call. Without an argument the sign-in works and
+ * returns `TEST_USER`; pass a refusal to test a failed one:
+ * `stubLogin(page, { status: 401, error: 'Invalid email or password.' })`.
+ *
+ * @param page - The test's page.
+ * @param refusal - The error status and the server's text, to refuse.
+ */
+export async function stubLogin(
+	page: Page,
+	refusal?: { status: number; error: string }
+): Promise<void> {
+	await page.route('**/auth/user/login', (route) =>
+		refusal
+			? route.fulfill({
+					status: refusal.status,
+					json: { error: refusal.error },
+				})
+			: route.fulfill({ status: 200, json: { user: TEST_USER } })
+	);
+}

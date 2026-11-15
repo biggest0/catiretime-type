@@ -9,8 +9,12 @@ import { AppSettingProvider } from '@/contexts/AppSettingProvider';
 import { createAppStore } from '@/store/store';
 
 interface RenderWithProvidersOptions extends Omit<RenderOptions, 'wrapper'> {
-	/** The address the component is rendered at. Default: `/`. */
-	route?: string;
+	/**
+	 * The address the component is rendered at. Default: `/`. An object adds
+	 * the navigation's `state`, as `navigate(path, { state })` would have
+	 * left it: `{ pathname: '/login', state: { from: '/stats' } }`.
+	 */
+	route?: string | { pathname: string; state?: unknown };
 }
 
 /**

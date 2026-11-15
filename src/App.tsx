@@ -16,6 +16,7 @@ import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
 // visitor downloads only the pages they open. The home page stays in the
 // main file: most visits start there.
 const AccountPage = lazy(() => import('@/pages/AccountPage'));
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 /**
@@ -70,6 +71,7 @@ function AppLayout() {
 						<Routes>
 							<Route path={PAGE_ROUTES.HOME} element={<HomePage />} />
 							<Route path={PAGE_ROUTES.ACCOUNT} element={<AccountPage />} />
+							<Route path={PAGE_ROUTES.LOGIN} element={<LoginPage />} />
 							{/* Every other address, including the shell's paths whose
 							    pages come later (login, privacy…) */}
 							<Route path="*" element={<NotFoundPage />} />

@@ -23,6 +23,17 @@
   },
   "AUTH": {
     "LOGIN": "Log In",
+    "EMAIL": "Email",
+    "PASSWORD": "Password",
+    "LOGGING_IN": "Logging in...",
+    "EMAIL_REQUIRED": "Enter your email.",
+    "PASSWORD_REQUIRED": "Enter your password.",
+    "OR": "or",
+    "SIGN_IN_GOOGLE": "Sign in with Google",
+    "GOOGLE_FAILED": "Google sign-in failed. Please try again.",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "NO_ACCOUNT": "Don't have an account?",
+    "REGISTER": "Register",
     "NETWORK_ERROR": "Couldn't reach the server. Check your connection and try again.",
     "INVALID_CREDENTIALS": "Wrong email or password.",
     "EMAIL_IN_USE": "An account with this email already exists.",
@@ -41,6 +52,9 @@
     },
     "ACCOUNT": {
       "TITLE": "Account"
+    },
+    "LOGIN": {
+      "TITLE": "Log in"
     }
   },
   "SEO": {
@@ -54,6 +68,9 @@
     },
     "ACCOUNT": {
       "TITLE": "Account"
+    },
+    "LOGIN": {
+      "TITLE": "Log in"
     }
   }
 }
