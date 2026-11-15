@@ -89,6 +89,18 @@
 	</head>
 	<body>
 		<div id="root"></div>
+		<!-- Without JavaScript nothing above is filled in. Nothing can pick a
+			language either, so the message is in each one. -->
+		<noscript>
+			<p class="p-6 text-center">
+				This app needs JavaScript. Please turn it on in your browser's settings,
+				then reload the page.
+			</p>
+			<p lang="fr" class="px-6 text-center">
+				Cette application a besoin de JavaScript. Veuillez l'activer dans les
+				réglages de votre navigateur, puis recharger la page.
+			</p>
+		</noscript>
 		<script type="module" src="/src/main.tsx"></script>
 	</body>
 </html>

@@ -31,3 +31,17 @@ test('the mobile menu shows the app version', async ({ page }) => {
 	// full-screen: the side panel's edge line would show down the left side
 	await expect(menu).toHaveCSS('border-left-width', '0px');
 });
+
+test('with JavaScript off, the page says the app needs it', async ({
+	browser,
+}) => {
+	const context = await browser.newContext({ javaScriptEnabled: false });
+	const page = await context.newPage();
+
+	await page.goto('/');
+
+	// nothing can translate without JavaScript, so both languages show
+	await expect(page.getByText(/needs JavaScript/)).toBeVisible();
+	await expect(page.getByText(/a besoin de JavaScript/)).toBeVisible();
+	await context.close();
+});
