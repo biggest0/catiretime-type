@@ -13,8 +13,9 @@ import { cva } from 'class-variance-authority';
 export const buttonVariants = cva(
 	// every variant: layout, the uppercase newspaper type, and the disabled,
 	// invalid and icon styles. No focus classes: index.css draws the keyboard
-	// focus ring for everything (shadcn's own was too faint to see). The dark: classes are shadcn's
-	// opacity tweaks on tokens, the app's one allowed dark: exception
+	// focus ring for everything (shadcn's own was too faint to see). The
+	// dark: classes are shadcn's opacity tweaks on tokens, the app's one
+	// allowed dark: exception
 	"group/button inline-flex shrink-0 items-center justify-center rounded-lg border border-transparent bg-clip-padding text-xs font-semibold tracking-widest whitespace-nowrap uppercase transition-all select-none active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-3.5",
 	{
 		variants: {

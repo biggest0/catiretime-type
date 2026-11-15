@@ -37,6 +37,9 @@ export function SocialMediaLinks({ className }: SocialMediaLinksProps) {
 						target="_blank"
 						rel="noopener noreferrer"
 						aria-label={label}
+						// a 24px box around the 20px icon: the smallest tap target
+						// the shell draws (as `AppLogo`'s)
+						className="flex h-6 w-6 items-center justify-center"
 					>
 						<Icon className="h-5 w-5 cursor-pointer text-muted-foreground hover:text-foreground" />
 					</a>

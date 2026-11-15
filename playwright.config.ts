@@ -5,7 +5,8 @@ import { defineConfig, devices } from '@playwright/test';
  *
  * - Runs against the production build served by `vite preview` on port 4174
  *   (strict, see vite.config.ts): no dev-mode StrictMode double effects, a
- *   prod-like bundle. `npm run test:e2e` builds first; CI builds in a prior step.
+ *   prod-like bundle. `npm run test:e2e` builds first; CI builds in a prior
+ *   step.
  * - The backend is stubbed per test with page.route (see e2e/support), so no
  *   API server is needed, locally or in CI.
  * - The browsers ask for English (`locale`), whatever the machine's language,

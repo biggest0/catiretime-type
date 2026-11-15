@@ -25,8 +25,9 @@ export const vendorChunks: Record<string, string[]> = {
 
 // https://vite.dev/config/
 export default defineConfig({
-	// package.json is the single source of truth for the app version and public
-	// origin; both are injected at build time and read back in src/config/config.ts.
+	// package.json is the single source of truth for the app version and
+	// public origin; both are injected at build time and read back in
+	// src/config/config.ts.
 	define: {
 		__APP_VERSION__: JSON.stringify(pkg.version),
 		__SITE_URL__: JSON.stringify(pkg.homepage.replace(/\/$/, '')),
@@ -35,7 +36,8 @@ export default defineConfig({
 	server: {
 		host: 'localhost',
 		port: 5173,
-		// fail loudly when the port is taken instead of silently moving to the next one
+		// fail loudly when the port is taken instead of silently moving to the
+		// next one
 		strictPort: true,
 	},
 	// `vite preview` (used by Playwright). Not Vite's default 4173, which other
@@ -67,9 +69,9 @@ export default defineConfig({
 				// Modules are matched by file path, so every file of a package lands
 				// in its chunk: subpaths like react-dom/client and react/jsx-runtime,
 				// and the wrappers Vite generates for CommonJS packages like React.
-				// The object form ({ react: ['react', …] }) matches import names only:
-				// once Redux was imported, it put React itself in the redux chunk and
-				// the JSX runtime in baseui.
+				// The object form ({ react: ['react', …] }) matches import names
+				// only: once Redux was imported, it put React itself in the redux
+				// chunk and the JSX runtime in baseui.
 				manualChunks(id) {
 					for (const [chunk, packages] of Object.entries(vendorChunks)) {
 						if (packages.some((pkg) => id.includes(`/node_modules/${pkg}/`))) {

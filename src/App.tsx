@@ -56,7 +56,7 @@ function AppLayout() {
 			<Header />
 			<main
 				id={MAIN_CONTENT_ID}
-				className="mx-auto min-h-screen w-full max-w-[1280px] bg-background px-4 transition-colors duration-200"
+				className="mx-auto min-h-screen w-full max-w-page bg-background px-4 transition-colors duration-200"
 			>
 				{/* After a navigation: back to the top, then focus on the new
 				    page's heading */}

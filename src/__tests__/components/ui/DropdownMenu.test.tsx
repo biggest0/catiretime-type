@@ -1,7 +1,8 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
+import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
 import {
 	DropdownMenu,
 	DropdownMenuContent,
@@ -16,7 +17,7 @@ import {
  * @returns The trigger button.
  */
 function renderMenu(onEnglish = vi.fn()) {
-	render(
+	renderWithProviders(
 		<DropdownMenu>
 			<DropdownMenuTrigger>Language</DropdownMenuTrigger>
 			<DropdownMenuContent>

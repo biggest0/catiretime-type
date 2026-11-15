@@ -35,6 +35,8 @@ const PAIRS = [
 		{ token, on: 'background', min: TEXT },
 		{ token, on: 'card', min: TEXT },
 	]),
+	// body text on the neutral surface (hovered rows, ThemeSelector's group)
+	{ token: 'foreground-secondary', on: 'muted', min: TEXT },
 	// each surface's own text colour
 	{ token: 'card-foreground', on: 'card', min: TEXT },
 	{ token: 'popover-foreground', on: 'popover', min: TEXT },

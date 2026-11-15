@@ -21,7 +21,7 @@ export function Footer() {
 	const year = new Date().getFullYear();
 
 	return (
-		<footer className="mx-auto mt-6 w-full max-w-[1280px] border-t border-border-subtle bg-background transition-colors duration-200">
+		<footer className="mx-auto mt-6 w-full max-w-page border-t border-border-subtle bg-background transition-colors duration-200">
 			{/* Name, tagline and social links: centred on phones, on the left
 			    from md */}
 			<div className="flex flex-col items-center space-y-4 px-4 py-12 md:items-start">

@@ -51,7 +51,8 @@ export function ThemeSelector({ className }: ThemeSelectorProps) {
 							'flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-200 ease-in-out focus:ring-2 focus:ring-brand focus:outline-none',
 							selected
 								? 'bg-control-active text-foreground shadow-sm'
-								: 'text-muted-foreground hover:text-foreground'
+								: // not muted-foreground: on bg-muted it is under 4.5:1
+									'text-foreground-secondary hover:text-foreground'
 						)}
 						aria-label={t('THEME.SWITCH_TO', { mode: t(labelKey) })}
 						aria-pressed={selected}

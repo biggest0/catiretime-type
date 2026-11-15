@@ -33,6 +33,10 @@
 	--typeface-body: 'Tinos', serif;
 	--typeface-heading: 'Cardo', serif;
 
+	/* the widest the page's content gets (header, main and footer share it):
+	   max-w-page */
+	--page-width: 80rem;
+
 	/* corner radius: rounded-sm … rounded-4xl are all derived from it (see
 	   @theme inline), so this one value rounds or squares every corner.
 	   0rem keeps the square newspaper look; the same in both themes */
@@ -163,6 +167,9 @@
 	/* typography: font-body, font-heading */
 	--font-body: var(--typeface-body);
 	--font-heading: var(--typeface-heading);
+
+	/* page width: max-w-page */
+	--container-page: var(--page-width);
 
 	/* corner radius: shadcn's scale, each size a multiple of --radius.
 	   Plain `rounded` and `rounded-xs` keep Tailwind's fixed sizes, so
