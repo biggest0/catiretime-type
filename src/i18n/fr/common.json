@@ -22,7 +22,12 @@
     "ACCOUNT_LABEL": "Compte"
   },
   "AUTH": {
-    "LOGIN": "Se connecter"
+    "LOGIN": "Se connecter",
+    "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+    "INVALID_CREDENTIALS": "Courriel ou mot de passe incorrect.",
+    "EMAIL_IN_USE": "Un compte existe déjà avec ce courriel.",
+    "RATE_LIMITED": "Trop de tentatives. Veuillez patienter quelques minutes.",
+    "SERVER_ERROR": "Une erreur s'est produite de notre côté. Veuillez réessayer."
   },
   "FOOTER": {
     "BRAND_TAGLINE": "Exercices de dactylo par {{parentSite}}",

@@ -22,7 +22,12 @@
     "ACCOUNT_LABEL": "Account"
   },
   "AUTH": {
-    "LOGIN": "Log In"
+    "LOGIN": "Log In",
+    "NETWORK_ERROR": "Couldn't reach the server. Check your connection and try again.",
+    "INVALID_CREDENTIALS": "Wrong email or password.",
+    "EMAIL_IN_USE": "An account with this email already exists.",
+    "RATE_LIMITED": "Too many attempts. Please wait a few minutes.",
+    "SERVER_ERROR": "Something went wrong on our side. Please try again."
   },
   "FOOTER": {
     "BRAND_TAGLINE": "Typing practice by {{parentSite}}",
