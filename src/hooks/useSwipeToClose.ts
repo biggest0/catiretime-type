@@ -12,8 +12,8 @@ const LEFT_EDGE_ZONE = 20;
 /**
  * Swipe right to close a panel that slides in from the right. While a finger
  * drags right, `dragOffset` says how far, so the panel can follow it; on
- * release, a swipe of more than 100px calls `onClose`; anything shorter lets
- * the panel spring back.
+ * release, a swipe of more than 100px calls `onClose`; anything shorter, or
+ * a touch the browser cancels, lets the panel spring back.
  *
  * @param onClose - Called when a swipe goes far enough.
  * @returns `isDragging`, `dragOffset` (px, never negative) and
@@ -55,9 +55,20 @@ export function useSwipeToClose(onClose: () => void) {
 		if (distance > MIN_SWIPE_DISTANCE) onClose();
 	};
 
+	/**
+	 * The browser took the touch over (a system gesture, a second finger):
+	 * no `touchend` will follow. Let the panel spring back, and don't close:
+	 * the visitor didn't finish the swipe.
+	 */
+	const onTouchCancel = () => {
+		startX.current = null;
+		setIsDragging(false);
+		setDragOffset(0);
+	};
+
 	return {
 		isDragging,
 		dragOffset,
-		touchHandlers: { onTouchStart, onTouchMove, onTouchEnd },
+		touchHandlers: { onTouchStart, onTouchMove, onTouchEnd, onTouchCancel },
 	};
 }

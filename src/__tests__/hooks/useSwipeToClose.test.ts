@@ -84,4 +84,21 @@ describe('useSwipeToClose', () => {
 		expect(onClose).not.toHaveBeenCalled();
 		expect(result.current.isDragging).toBe(false);
 	});
+
+	it('lets go of the panel, without closing, when the system cancels a swipe', () => {
+		const onClose = vi.fn();
+		const { result } = renderHook(() => useSwipeToClose(onClose));
+		act(() => result.current.touchHandlers.onTouchStart(touchAt(200)));
+		act(() => result.current.touchHandlers.onTouchMove(touchAt(350)));
+
+		// the browser takes the touch over (a system gesture, a second
+		// finger): it sends touchcancel, and no touchend follows
+		act(() => result.current.touchHandlers.onTouchCancel());
+
+		expect(result.current.isDragging).toBe(false);
+		expect(result.current.dragOffset).toBe(0);
+		// far enough to close, had the finger been lifted: a cancel isn't
+		// the visitor's decision
+		expect(onClose).not.toHaveBeenCalled();
+	});
 });
