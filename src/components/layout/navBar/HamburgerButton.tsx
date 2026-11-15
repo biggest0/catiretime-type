@@ -3,8 +3,15 @@ import { useTranslation } from 'react-i18next';
 
 import { cn } from '@/lib/utils';
 
-/** One of the three lines; they turn into an X while the menu is open. */
-const LINE = 'h-0.5 w-5 bg-foreground-secondary transition-all duration-300';
+/**
+ * One of the three lines; they turn into an X while the menu is open.
+ *
+ * A line is a bar of background colour, and forced colours (Windows contrast
+ * themes) replace every background with the page's: the icon would vanish.
+ * `ButtonText` is one of the visitor's own colours, which that mode keeps.
+ */
+const LINE =
+	'h-0.5 w-5 bg-foreground-secondary transition-all duration-300 forced-colors:bg-[ButtonText]';
 
 interface HamburgerButtonProps {
 	isOpen: boolean;
