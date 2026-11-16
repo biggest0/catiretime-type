@@ -31,6 +31,7 @@
     "OR": "or",
     "SIGN_IN_GOOGLE": "Sign in with Google",
     "GOOGLE_FAILED": "Google sign-in failed. Please try again.",
+    "GOOGLE_STATE_INVALID": "Sign-in request was invalid. Please try again.",
     "FORGOT_PASSWORD": "Forgot password?",
     "NO_ACCOUNT": "Don't have an account?",
     "REGISTER": "Register",
@@ -55,6 +56,9 @@
     },
     "LOGIN": {
       "TITLE": "Log in"
+    },
+    "GOOGLE_CALLBACK": {
+      "TITLE": "Signing in with Google"
     }
   },
   "SEO": {
@@ -71,6 +75,9 @@
     },
     "LOGIN": {
       "TITLE": "Log in"
+    },
+    "GOOGLE_CALLBACK": {
+      "TITLE": "Signing in"
     }
   }
 }

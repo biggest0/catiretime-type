@@ -31,6 +31,7 @@
     "OR": "ou",
     "SIGN_IN_GOOGLE": "Se connecter avec Google",
     "GOOGLE_FAILED": "La connexion avec Google a échoué. Veuillez réessayer.",
+    "GOOGLE_STATE_INVALID": "La demande de connexion était invalide. Veuillez réessayer.",
     "FORGOT_PASSWORD": "Mot de passe oublié ?",
     "NO_ACCOUNT": "Vous n'avez pas de compte ?",
     "REGISTER": "S'inscrire",
@@ -55,6 +56,9 @@
     },
     "LOGIN": {
       "TITLE": "Connexion"
+    },
+    "GOOGLE_CALLBACK": {
+      "TITLE": "Connexion avec Google"
     }
   },
   "SEO": {
@@ -71,6 +75,9 @@
     },
     "LOGIN": {
       "TITLE": "Connexion"
+    },
+    "GOOGLE_CALLBACK": {
+      "TITLE": "Connexion en cours"
     }
   }
 }

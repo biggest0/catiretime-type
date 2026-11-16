@@ -26,6 +26,12 @@ export const UI_LANGUAGE = 'i18nextLng';
 export const GOOGLE_OAUTH_STATE = 'google_oauth_state';
 
 /**
+ * The page a Google sign-in started from, saved next to its state, so the
+ * visitor comes back to it after the trip through Google.
+ */
+export const GOOGLE_OAUTH_RETURN_TO = 'google_oauth_return_to';
+
+/**
  * When this tab last reloaded itself to replace page files a deploy removed
  * (`RouteErrorBoundary`), so it never reloads in a loop.
  */
