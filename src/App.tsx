@@ -17,6 +17,7 @@ import { MAIN_CONTENT_ID } from '@/utils/a11y/pageFocus';
 // main file: most visits start there.
 const AccountPage = lazy(() => import('@/pages/AccountPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const GoogleCallbackPage = lazy(() => import('@/pages/GoogleCallbackPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 /**
@@ -72,6 +73,10 @@ function AppLayout() {
 							<Route path={PAGE_ROUTES.HOME} element={<HomePage />} />
 							<Route path={PAGE_ROUTES.ACCOUNT} element={<AccountPage />} />
 							<Route path={PAGE_ROUTES.LOGIN} element={<LoginPage />} />
+							<Route
+								path={PAGE_ROUTES.GOOGLE_CALLBACK}
+								element={<GoogleCallbackPage />}
+							/>
 							{/* Every other address, including the shell's paths whose
 							    pages come later (login, privacy…) */}
 							<Route path="*" element={<NotFoundPage />} />

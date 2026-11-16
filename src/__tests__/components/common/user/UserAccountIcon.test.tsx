@@ -1,4 +1,6 @@
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import { describe, expect, it, vi } from 'vitest';
 
 import { renderWithProviders } from '@/__tests__/helpers/renderWithProviders';
@@ -54,4 +56,44 @@ describe('UserAccountIcon', () => {
 			PAGE_ROUTES.ACCOUNT
 		);
 	});
+
+	it.each([
+		['icon', undefined],
+		['full', 'full' as const],
+	])(
+		'tells the login page which page the visitor was on (%s)',
+		async (_label, variant) => {
+			vi.mocked(useAuth).mockReturnValue({
+				user: null,
+				isAuthenticated: false,
+				isLoading: false,
+				login: vi.fn(),
+				register: vi.fn(),
+				loginWithGoogle: vi.fn(),
+				logout: vi.fn(),
+			});
+			renderWithProviders(
+				<Routes>
+					<Route
+						path="/somewhere"
+						element={<UserAccountIcon variant={variant} />}
+					/>
+					<Route path={PAGE_ROUTES.LOGIN} element={<ShowState />} />
+				</Routes>,
+				{ route: '/somewhere?x=1#part' }
+			);
+
+			await userEvent.click(screen.getByRole('link', { name: 'Log In' }));
+
+			// the login page sends the visitor back there once signed in
+			expect(screen.getByTestId('state')).toHaveTextContent(
+				JSON.stringify({ from: '/somewhere?x=1#part' })
+			);
+		}
+	);
 });
+
+/** Shows the navigation state the page was reached with. */
+function ShowState() {
+	return <p data-testid="state">{JSON.stringify(useLocation().state)}</p>;
+}

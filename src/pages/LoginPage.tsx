@@ -13,40 +13,28 @@ import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { authErrorMessage } from '@/utils/auth/authErrors';
 import {
+	googleProblemMessage,
 	isGoogleLoginAvailable,
 	startGoogleLogin,
+	type GoogleLoginProblem,
 } from '@/utils/auth/googleLogin';
+import {
+	destinationAfterLogin,
+	readLoginPageState,
+} from '@/utils/auth/loginReturn';
 
 /** A link inside a line of text: underlined, since colour alone isn't a cue. */
 const TEXT_LINK = 'text-brand underline underline-offset-4';
 
 /**
- * Where a visitor goes once signed in: back to the page that sent them to
- * log in, or the account page.
- *
- * @param state - The navigation state they arrived with. A guarded page
- *   sends `{ from: '/its-path' }`.
- * @returns A path inside the app. Anything else in `from` (another site's
- *   address, `//host`, not text) is ignored.
- */
-function destinationAfterLogin(state: unknown): string {
-	const from =
-		typeof state === 'object' && state !== null && 'from' in state
-			? state.from
-			: undefined;
-	// one leading slash: a path of this app
-	return typeof from === 'string' && /^\/(?!\/)/.test(from)
-		? from
-		: PAGE_ROUTES.ACCOUNT;
-}
-
-/**
  * The login page: email and password, or Google when the build has its
  * settings. Empty fields are named one by one, with focus on the first. A
- * refused sign-in shows one message for the form (`authErrorMessage`).
+ * refused sign-in shows one message for the form (`authErrorMessage`), as
+ * does a Google sign-in that came back without signing in.
  *
- * A signed-in visitor never sees the form: they're sent on at once. The same
- * rule moves the visitor on after a successful login, so there is no
+ * A signed-in visitor never sees the form: they're sent on at once, back to
+ * the page they logged in from (`destinationAfterLogin`). The same rule
+ * moves the visitor on after a successful login, so there is no
  * `navigate()` call here.
  *
  * @returns The login page.
@@ -55,6 +43,10 @@ export default function LoginPage() {
 	const { t } = useTranslation();
 	const location = useLocation();
 	const { isAuthenticated, login } = useAuth();
+	// the page to go back to, and why a Google sign-in came back (if it did)
+	const { from, googleProblem: googleProblemOnArrival } = readLoginPageState(
+		location.state
+	);
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -64,7 +56,9 @@ export default function LoginPage() {
 	// while rendering, so it follows a change of language. Wrapped in an
 	// object because anything can be thrown, even `undefined`.
 	const [failure, setFailure] = useState<{ error: unknown } | null>(null);
-	const [googleFailed, setGoogleFailed] = useState(false);
+	const [googleProblem, setGoogleProblem] = useState<GoogleLoginProblem | null>(
+		googleProblemOnArrival
+	);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const emailRef = useRef<HTMLInputElement>(null);
@@ -73,7 +67,7 @@ export default function LoginPage() {
 	// signed in already, or just now: on to where they were going. `replace`
 	// keeps the login form out of the Back button's way.
 	if (isAuthenticated) {
-		return <Navigate to={destinationAfterLogin(location.state)} replace />;
+		return <Navigate to={destinationAfterLogin(from)} replace />;
 	}
 
 	/** @param event - The form's submit. */
@@ -83,7 +77,7 @@ export default function LoginPage() {
 		if (isSubmitting) return;
 
 		setFailure(null);
-		setGoogleFailed(false);
+		setGoogleProblem(null);
 
 		// a password is sent exactly as typed; spaces around an email are
 		// never meant
@@ -110,13 +104,17 @@ export default function LoginPage() {
 	/** Leaves for Google, or says the sign-in couldn't start. */
 	const handleGoogleLogin = () => {
 		setFailure(null);
-		setGoogleFailed(!startGoogleLogin());
+		// Google gets the same page to come back to as this form
+		const started = startGoogleLogin(
+			typeof from === 'string' ? from : undefined
+		);
+		setGoogleProblem(started ? null : 'failed');
 	};
 
 	const formMessage = failure
 		? authErrorMessage(t, failure.error, 'login')
-		: googleFailed
-			? t('AUTH.GOOGLE_FAILED')
+		: googleProblem
+			? googleProblemMessage(t, googleProblem)
 			: null;
 
 	return (

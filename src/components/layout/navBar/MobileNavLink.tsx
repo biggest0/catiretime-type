@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 interface MobileNavLinkProps {
 	linkTo: string;
 	linkLabel: string;
+	state?: unknown;
 }
 
 /**
@@ -15,12 +16,19 @@ interface MobileNavLinkProps {
  *
  * @param props.linkTo - Where it goes (a path from `routes.ts`).
  * @param props.linkLabel - Its text, already translated.
+ * @param props.state - Navigation state for the page it opens (the login
+ *   link sends the page the visitor is on).
  * @returns The link.
  */
-export function MobileNavLink({ linkTo, linkLabel }: MobileNavLinkProps) {
+export function MobileNavLink({
+	linkTo,
+	linkLabel,
+	state,
+}: MobileNavLinkProps) {
 	return (
 		<NavLink
 			to={linkTo}
+			state={state}
 			className={({ isActive }) =>
 				cn(
 					'flex items-center rounded-md px-4 py-2 transition-colors hover:bg-muted',

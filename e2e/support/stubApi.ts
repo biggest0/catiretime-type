@@ -55,3 +55,24 @@ export async function stubLogin(
 			: route.fulfill({ status: 200, json: { user: TEST_USER } })
 	);
 }
+
+/**
+ * Answers the Google code exchange: the last step of a Google sign-in, made
+ * by the Google return page. Without an argument it signs `TEST_USER` in.
+ *
+ * @param page - The test's page.
+ * @param refusal - The error status and the server's text, to refuse.
+ */
+export async function stubGoogleExchange(
+	page: Page,
+	refusal?: { status: number; error: string }
+): Promise<void> {
+	await page.route('**/auth/user/google/exchange', (route) =>
+		refusal
+			? route.fulfill({
+					status: refusal.status,
+					json: { error: refusal.error },
+				})
+			: route.fulfill({ status: 200, json: { user: TEST_USER } })
+	);
+}

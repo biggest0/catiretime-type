@@ -19,7 +19,8 @@ const google = vi.hoisted(() => ({
 	available: true,
 	start: vi.fn(() => true),
 }));
-vi.mock('@/utils/auth/googleLogin', () => ({
+vi.mock('@/utils/auth/googleLogin', async (importOriginal) => ({
+	...(await importOriginal<object>()),
 	get isGoogleLoginAvailable() {
 		return google.available;
 	},
@@ -41,6 +42,7 @@ function renderLogin(state?: unknown) {
 	renderWithProviders(
 		<Routes>
 			<Route path={PAGE_ROUTES.LOGIN} element={<LoginPage />} />
+			<Route path={PAGE_ROUTES.HOME} element={<p>The home page</p>} />
 			<Route path={PAGE_ROUTES.ACCOUNT} element={<p>The account page</p>} />
 			<Route path="/somewhere" element={<p>Where they were going</p>} />
 		</Routes>,
@@ -202,7 +204,7 @@ describe('LoginPage', () => {
 		expect(submitButton()).toHaveAttribute('aria-disabled', 'false');
 	});
 
-	it('goes to the account page once signed in', async () => {
+	it('goes to the home page when the visitor came straight here', async () => {
 		session.login.mockImplementation(async () => {
 			session.isAuthenticated = true;
 		});
@@ -211,7 +213,7 @@ describe('LoginPage', () => {
 
 		await userEvent.click(submitButton());
 
-		expect(await screen.findByText('The account page')).toBeInTheDocument();
+		expect(await screen.findByText('The home page')).toBeInTheDocument();
 	});
 
 	it('goes back to the page that sent the visitor here', async () => {
@@ -231,7 +233,7 @@ describe('LoginPage', () => {
 	it('sends an already signed-in visitor on, without showing the form', () => {
 		session.isAuthenticated = true;
 
-		renderLogin();
+		renderLogin({ from: PAGE_ROUTES.ACCOUNT });
 
 		expect(screen.getByText('The account page')).toBeInTheDocument();
 		expect(screen.queryByLabelText('Email')).not.toBeInTheDocument();
@@ -243,12 +245,12 @@ describe('LoginPage', () => {
 		['something that is not text', 42],
 		['the login page itself', '/login'],
 		['the login page with a query', '/login?next=1'],
-	])('ignores a "from" that is %s', (_label, from) => {
+	])('goes home instead of a "from" that is %s', (_label, from) => {
 		session.isAuthenticated = true;
 
 		renderLogin({ from });
 
-		expect(screen.getByText('The account page')).toBeInTheDocument();
+		expect(screen.getByText('The home page')).toBeInTheDocument();
 	});
 
 	it('starts a Google sign-in from its button', async () => {
@@ -259,6 +261,36 @@ describe('LoginPage', () => {
 		);
 
 		expect(google.start).toHaveBeenCalledOnce();
+		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+	});
+
+	it('gives Google sign-in the page to come back to', async () => {
+		renderLogin({ from: '/somewhere' });
+
+		await userEvent.click(
+			screen.getByRole('button', { name: 'Sign in with Google' })
+		);
+
+		expect(google.start).toHaveBeenCalledExactlyOnceWith('/somewhere');
+	});
+
+	it.each([
+		['failed', en.AUTH.GOOGLE_FAILED],
+		['stateInvalid', en.AUTH.GOOGLE_STATE_INVALID],
+		['rateLimited', en.AUTH.RATE_LIMITED],
+		['network', en.AUTH.NETWORK_ERROR],
+	])('says why a Google sign-in came back (%s)', (googleProblem, message) => {
+		renderLogin({ from: '/somewhere', googleProblem });
+
+		expect(screen.getByRole('alert')).toHaveTextContent(message);
+	});
+
+	it('clears the Google message when the form is sent', async () => {
+		renderLogin({ googleProblem: 'failed' });
+		await fillIn('cat@example.com', 'secret');
+
+		await userEvent.click(submitButton());
+
 		expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 	});
 
