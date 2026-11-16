@@ -2,40 +2,50 @@ import { API_URL } from '@/config/config';
 import type { AuthResponse, AuthUser, Credentials } from '@/types/authTypes';
 
 /**
- * Thrown when an auth endpoint answers with an error status. `status` tells
- * callers what kind of failure it was (401, 409, 429…); `message` is the
- * server's own error text.
+ * Thrown when an auth endpoint answers with an error status. `code` names
+ * the problem (`EMAIL_INVALID`) for the app to translate; `status` tells
+ * what kind of failure it was (401, 409, 429…); `message` is the server's
+ * own text, in English.
  */
 export class ApiError extends Error {
 	readonly status: number;
+	readonly code: string | null;
 
 	/**
 	 * @param status - The HTTP status of the failed response.
 	 * @param message - The server's error text, or a fallback naming the status.
+	 * @param code - The server's name for the problem, or null when the answer
+	 *   has none (a proxy's error page, a server older than the codes).
 	 */
-	constructor(status: number, message: string) {
+	constructor(status: number, message: string, code: string | null = null) {
 		super(message);
 		this.name = 'ApiError';
 		this.status = status;
+		this.code = code;
 	}
 }
 
 /**
- * Picks the server's error text out of a failed response's body.
+ * Picks the server's text and code out of a failed response's body, which
+ * it sends as `{ "error": "Invalid email format", "code": "EMAIL_INVALID" }`.
  *
  * @param payload - The parsed body, or null when it wasn't JSON.
- * @returns The body's `error` string, or undefined when it has none.
+ * @returns `text` (the body's `error`) and `code`, each undefined when the
+ *   body has no such string.
  */
-function errorText(payload: unknown): string | undefined {
-	if (
-		typeof payload === 'object' &&
-		payload !== null &&
-		'error' in payload &&
-		typeof payload.error === 'string'
-	) {
-		return payload.error;
+function errorFields(payload: unknown): {
+	text: string | undefined;
+	code: string | undefined;
+} {
+	if (typeof payload !== 'object' || payload === null) {
+		return { text: undefined, code: undefined };
 	}
-	return undefined;
+	const text = 'error' in payload ? payload.error : undefined;
+	const code = 'code' in payload ? payload.code : undefined;
+	return {
+		text: typeof text === 'string' ? text : undefined,
+		code: typeof code === 'string' ? code : undefined,
+	};
 }
 
 /**
@@ -58,13 +68,15 @@ async function post<T>(path: string, body?: unknown): Promise<T> {
 
 	const response = await fetch(`${API_URL}${path}`, init);
 
-	// failures come as { error }; a body that isn't JSON (a proxy's error
-	// page) falls back to naming the status
+	// failures come as { error, code }; a body that isn't JSON (a proxy's
+	// error page) falls back to naming the status, with no code
 	if (!response.ok) {
 		const payload: unknown = await response.json().catch(() => null);
+		const { text, code } = errorFields(payload);
 		throw new ApiError(
 			response.status,
-			errorText(payload) ?? `HTTP ${response.status}`
+			text ?? `HTTP ${response.status}`,
+			code ?? null
 		);
 	}
 

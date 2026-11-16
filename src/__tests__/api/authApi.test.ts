@@ -65,8 +65,10 @@ describe('authApi', () => {
 		});
 	});
 
-	it("throws an ApiError with the status and the server's error text", async () => {
-		stubFetch(jsonResponse({ error: 'Email already in use' }, 409));
+	it("throws an ApiError with the status, the server's text and its code", async () => {
+		stubFetch(
+			jsonResponse({ error: 'Email already in use', code: 'EMAIL_IN_USE' }, 409)
+		);
 
 		const error = await postRegister({ email: user.email, password: 'pw' })
 			// hand the rejection back as a value, so it can be inspected
@@ -76,6 +78,20 @@ describe('authApi', () => {
 		expect(error).toMatchObject({
 			status: 409,
 			message: 'Email already in use',
+			code: 'EMAIL_IN_USE',
+		});
+	});
+
+	it.each([
+		['no code (a server older than the codes)', { error: 'Refused' }],
+		['a code that is not text', { error: 'Refused', code: 42 }],
+	])('gives a null code when the answer has %s', async (_label, body) => {
+		stubFetch(jsonResponse(body, 400));
+
+		await expect(postRefreshToken()).rejects.toMatchObject({
+			status: 400,
+			message: 'Refused',
+			code: null,
 		});
 	});
 
@@ -85,6 +101,7 @@ describe('authApi', () => {
 		await expect(postRefreshToken()).rejects.toMatchObject({
 			status: 502,
 			message: 'HTTP 502',
+			code: null,
 		});
 	});
 
