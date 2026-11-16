@@ -56,7 +56,11 @@ test('signing in on a login page opened directly leads home', async ({
 test('a refused sign-in says why and keeps what was typed', async ({
 	page,
 }) => {
-	await stubLogin(page, { status: 401, error: 'Invalid email or password.' });
+	await stubLogin(page, {
+		status: 401,
+		error: 'Invalid email or password.',
+		code: 'INVALID_CREDENTIALS',
+	});
 	await page.goto('/login');
 
 	await page.getByLabel('Email').fill(TEST_USER.email);
@@ -129,6 +133,7 @@ test.describe('coming back from Google', () => {
 		await stubGoogleExchange(page, {
 			status: 401,
 			error: 'Login code is invalid or expired',
+			code: 'LOGIN_CODE_INVALID',
 		});
 
 		await page.goto(`/auth/google/callback?loginCode=code-1&state=${STATE}`);

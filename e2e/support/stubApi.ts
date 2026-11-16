@@ -4,6 +4,16 @@ import type { Page } from '@playwright/test';
 export const TEST_USER = { id: 'user-1', email: 'reader@example.com' };
 
 /**
+ * An error answer, as the backend sends one: its status, its English text
+ * (`error`) and its code, which the app translates.
+ */
+export interface Refusal {
+	status: number;
+	error: string;
+	code: string;
+}
+
+/**
  * Answers the backend calls every page load makes, as for a visitor with no
  * session, so e2e tests never reach a real server. The startup session check
  * gets a 401.
@@ -12,7 +22,10 @@ export const TEST_USER = { id: 'user-1', email: 'reader@example.com' };
  */
 export async function stubAnonymousVisitor(page: Page): Promise<void> {
 	await page.route('**/auth/user/refresh', (route) =>
-		route.fulfill({ status: 401, json: { error: 'No session' } })
+		route.fulfill({
+			status: 401,
+			json: { error: 'No session', code: 'SESSION_INVALID' },
+		})
 	);
 }
 
@@ -37,23 +50,20 @@ export async function stubSignedInVisitor(page: Page): Promise<void> {
 /**
  * Answers the sign-in call. Without an argument the sign-in works and
  * returns `TEST_USER`; pass a refusal to test a failed one:
- * `stubLogin(page, { status: 401, error: 'Invalid email or password.' })`.
+ * `stubLogin(page, { status: 401, error: 'Invalid email or password.',
+ * code: 'INVALID_CREDENTIALS' })`.
  *
  * @param page - The test's page.
- * @param refusal - The error status and the server's text, to refuse.
+ * @param refusal - The error answer to give instead.
  */
-export async function stubLogin(
-	page: Page,
-	refusal?: { status: number; error: string }
-): Promise<void> {
-	await page.route('**/auth/user/login', (route) =>
-		refusal
-			? route.fulfill({
-					status: refusal.status,
-					json: { error: refusal.error },
-				})
-			: route.fulfill({ status: 200, json: { user: TEST_USER } })
-	);
+export async function stubLogin(page: Page, refusal?: Refusal): Promise<void> {
+	await page.route('**/auth/user/login', (route) => {
+		if (!refusal) {
+			return route.fulfill({ status: 200, json: { user: TEST_USER } });
+		}
+		const { status, ...body } = refusal;
+		return route.fulfill({ status, json: body });
+	});
 }
 
 /**
@@ -61,18 +71,17 @@ export async function stubLogin(
  * by the Google return page. Without an argument it signs `TEST_USER` in.
  *
  * @param page - The test's page.
- * @param refusal - The error status and the server's text, to refuse.
+ * @param refusal - The error answer to give instead.
  */
 export async function stubGoogleExchange(
 	page: Page,
-	refusal?: { status: number; error: string }
+	refusal?: Refusal
 ): Promise<void> {
-	await page.route('**/auth/user/google/exchange', (route) =>
-		refusal
-			? route.fulfill({
-					status: refusal.status,
-					json: { error: refusal.error },
-				})
-			: route.fulfill({ status: 200, json: { user: TEST_USER } })
-	);
+	await page.route('**/auth/user/google/exchange', (route) => {
+		if (!refusal) {
+			return route.fulfill({ status: 200, json: { user: TEST_USER } });
+		}
+		const { status, ...body } = refusal;
+		return route.fulfill({ status, json: body });
+	});
 }

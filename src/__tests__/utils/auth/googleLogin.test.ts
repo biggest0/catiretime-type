@@ -173,6 +173,12 @@ describe('readGoogleReturn', () => {
 			'failed',
 		],
 		[
+			"the backend couldn't finish with Google",
+			'error=GOOGLE_AUTH_FAILED',
+			saved,
+			'failed',
+		],
+		[
 			'the state differs',
 			'loginCode=c1&state=type.other',
 			saved,
