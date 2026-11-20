@@ -153,7 +153,9 @@ describe('LoginPage', () => {
 
 	it('signs in with the email trimmed and the password as typed', async () => {
 		renderLogin();
-		await fillIn('  cat@example.com ', ' pass word ');
+		// a browser strips ordinary spaces from an email field by itself, but
+		// not the no-break space that pasted text often carries
+		await fillIn('\u00A0cat@example.com\u00A0', ' pass word ');
 
 		await userEvent.click(submitButton());
 
