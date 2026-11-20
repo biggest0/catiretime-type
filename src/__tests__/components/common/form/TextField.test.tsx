@@ -64,6 +64,32 @@ describe('TextField', () => {
 		expect(input).toHaveAccessibleDescription('Enter your email address.');
 	});
 
+	it('describes the input by its hint, without marking it invalid', () => {
+		renderWithProviders(
+			<TextField label="Password" hint={<p>At least 8 characters</p>} />
+		);
+
+		const input = screen.getByLabelText('Password');
+		expect(screen.getByText('At least 8 characters')).toBeInTheDocument();
+		expect(input).toHaveAccessibleDescription('At least 8 characters');
+		expect(input).not.toHaveAttribute('aria-invalid');
+	});
+
+	it('reads the error first, then the hint', () => {
+		renderWithProviders(
+			<TextField
+				label="Password"
+				error="Too short."
+				hint={<p>At least 8 characters</p>}
+			/>
+		);
+
+		// what to fix comes before the help that is always there
+		expect(screen.getByLabelText('Password')).toHaveAccessibleDescription(
+			'Too short. At least 8 characters'
+		);
+	});
+
 	it('keeps two fields apart', () => {
 		renderWithProviders(
 			<>
