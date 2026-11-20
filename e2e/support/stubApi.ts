@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import type { Page, Route } from '@playwright/test';
 
 /** The user the fake backend signs in. */
 export const TEST_USER = { id: 'user-1', email: 'reader@example.com' };
@@ -48,6 +48,27 @@ export async function stubSignedInVisitor(page: Page): Promise<void> {
 }
 
 /**
+ * Answers a call that signs someone in: with `TEST_USER`, or with the
+ * refusal given.
+ *
+ * @param route - The intercepted request.
+ * @param refusal - The error answer to give instead, if any.
+ * @param okStatus - The status of a success (201 when an account is made).
+ * @returns Playwright's promise for the answer.
+ */
+function answerWithUser(
+	route: Route,
+	refusal: Refusal | undefined,
+	okStatus = 200
+): Promise<void> {
+	if (!refusal) {
+		return route.fulfill({ status: okStatus, json: { user: TEST_USER } });
+	}
+	const { status, ...body } = refusal;
+	return route.fulfill({ status, json: body });
+}
+
+/**
  * Answers the sign-in call. Without an argument the sign-in works and
  * returns `TEST_USER`; pass a refusal to test a failed one:
  * `stubLogin(page, { status: 401, error: 'Invalid email or password.',
@@ -57,13 +78,31 @@ export async function stubSignedInVisitor(page: Page): Promise<void> {
  * @param refusal - The error answer to give instead.
  */
 export async function stubLogin(page: Page, refusal?: Refusal): Promise<void> {
-	await page.route('**/auth/user/login', (route) => {
-		if (!refusal) {
-			return route.fulfill({ status: 200, json: { user: TEST_USER } });
-		}
-		const { status, ...body } = refusal;
-		return route.fulfill({ status, json: body });
+	await page.route('**/auth/user/login', (route) =>
+		answerWithUser(route, refusal)
+	);
+}
+
+/**
+ * Answers the register call. Without an argument the account is made and
+ * `TEST_USER` is signed in, as the backend does; pass a refusal to test a
+ * failed one.
+ *
+ * @param page - The test's page.
+ * @param refusal - The error answer to give instead.
+ * @returns How many register calls the page has made so far, read when
+ *   called: a form that should refuse before sending must leave it at 0.
+ */
+export async function stubRegister(
+	page: Page,
+	refusal?: Refusal
+): Promise<() => number> {
+	let calls = 0;
+	await page.route('**/auth/user/register', (route) => {
+		calls += 1;
+		return answerWithUser(route, refusal, 201);
 	});
+	return () => calls;
 }
 
 /**
@@ -77,11 +116,7 @@ export async function stubGoogleExchange(
 	page: Page,
 	refusal?: Refusal
 ): Promise<void> {
-	await page.route('**/auth/user/google/exchange', (route) => {
-		if (!refusal) {
-			return route.fulfill({ status: 200, json: { user: TEST_USER } });
-		}
-		const { status, ...body } = refusal;
-		return route.fulfill({ status, json: body });
-	});
+	await page.route('**/auth/user/google/exchange', (route) =>
+		answerWithUser(route, refusal)
+	);
 }

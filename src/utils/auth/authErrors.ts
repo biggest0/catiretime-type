@@ -7,9 +7,9 @@ import { ApiError } from '@/api/authApi';
  * A code never changes meaning, so matching it is safe; the server's English
  * text isn't. Several codes can share a message.
  *
- * Here: the codes every app on the backend can get, and the sign-in ones.
- * The register, email-verification and password-reset codes come with their
- * pages. Left out on purpose: a refused origin (the browser hides that
+ * Here: the codes every app on the backend can get, and the sign-in and
+ * register ones. The email-verification and password-reset codes come with
+ * their pages. Left out on purpose: a refused origin (the browser hides that
  * answer, so fetch fails first), the session codes (the session store acts
  * on the status), and the Google one-time code (its page names its own
  * problems).
@@ -17,12 +17,21 @@ import { ApiError } from '@/api/authApi';
 const CODE_MESSAGES = {
 	INVALID_CREDENTIALS: 'AUTH.INVALID_CREDENTIALS',
 	EMAIL_IN_USE: 'AUTH.EMAIL_IN_USE',
+	EMAIL_INVALID: 'AUTH.EMAIL_INVALID',
+	// The form checks these before sending (passwordRules.ts), so they come
+	// back only if the backend's rules have changed since.
+	PASSWORD_TOO_SHORT: 'AUTH.PASSWORD_RULES_UNMET',
+	PASSWORD_NEEDS_UPPERCASE: 'AUTH.PASSWORD_RULES_UNMET',
+	PASSWORD_NEEDS_LOWERCASE: 'AUTH.PASSWORD_RULES_UNMET',
+	PASSWORD_NEEDS_NUMBER: 'AUTH.PASSWORD_RULES_UNMET',
 	RATE_LIMITED: 'AUTH.RATE_LIMITED',
 	INTERNAL_ERROR: 'AUTH.SERVER_ERROR',
 	// the server couldn't use what the app sent: our mistake, not the visitor's
 	ROUTE_NOT_FOUND: 'AUTH.SERVER_ERROR',
 	INVALID_JSON: 'AUTH.SERVER_ERROR',
 	PAYLOAD_TOO_LARGE: 'AUTH.SERVER_ERROR',
+	// the forms never send an empty field
+	CREDENTIALS_REQUIRED: 'AUTH.SERVER_ERROR',
 } as const;
 
 /** A code `CODE_MESSAGES` has a message for. */

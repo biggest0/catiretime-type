@@ -35,11 +35,28 @@
     "FORGOT_PASSWORD": "Forgot password?",
     "NO_ACCOUNT": "Don't have an account?",
     "REGISTER": "Register",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "REGISTERING": "Registering...",
+    "HAS_ACCOUNT": "Already have an account?",
     "NETWORK_ERROR": "Couldn't reach the server. Check your connection and try again.",
     "INVALID_CREDENTIALS": "Wrong email or password.",
     "EMAIL_IN_USE": "An account with this email already exists.",
     "RATE_LIMITED": "Too many attempts. Please wait a few minutes.",
-    "SERVER_ERROR": "Something went wrong on our side. Please try again."
+    "SERVER_ERROR": "Something went wrong on our side. Please try again.",
+    "EMAIL_INVALID": "Enter a valid email address.",
+    "NEW_PASSWORD_REQUIRED": "Choose a password.",
+    "CONFIRM_PASSWORD_REQUIRED": "Enter the same password again.",
+    "PASSWORDS_MISMATCH": "Passwords do not match.",
+    "PASSWORD_RULES": "Your password needs:",
+    "PASSWORD_RULE_LENGTH": "At least {{min}} characters",
+    "PASSWORD_RULE_UPPERCASE": "An uppercase letter (A–Z)",
+    "PASSWORD_RULE_LOWERCASE": "A lowercase letter (a–z)",
+    "PASSWORD_RULE_NUMBER": "A number (0–9)",
+    "PASSWORD_RULE_MET": "met",
+    "PASSWORD_RULE_NOT_MET": "not met yet",
+    "PASSWORD_RULES_UNMET": "Your password doesn't meet every rule.",
+    "VERIFY_EMAIL_SENT": "We've sent a verification email to:",
+    "VERIFY_EMAIL_NEXT": "Click the link inside to verify your account."
   },
   "FOOTER": {
     "BRAND_TAGLINE": "Typing practice by {{parentSite}}",
@@ -56,6 +73,10 @@
     },
     "LOGIN": {
       "TITLE": "Log in"
+    },
+    "REGISTER": {
+      "TITLE": "Register",
+      "VERIFY_TITLE": "Verify your email"
     },
     "GOOGLE_CALLBACK": {
       "TITLE": "Signing in with Google"
@@ -75,6 +96,9 @@
     },
     "LOGIN": {
       "TITLE": "Log in"
+    },
+    "REGISTER": {
+      "TITLE": "Register"
     },
     "GOOGLE_CALLBACK": {
       "TITLE": "Signing in"

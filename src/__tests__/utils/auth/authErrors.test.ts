@@ -5,6 +5,7 @@ import i18n from '@/i18n/config';
 import en from '@/i18n/en/common.json';
 import fr from '@/i18n/fr/common.json';
 import { authErrorMessage } from '@/utils/auth/authErrors';
+import { PASSWORD_RULES } from '@/utils/auth/passwordRules';
 
 /** `t` fixed to one language, whatever the test before left selected. */
 const t = i18n.getFixedT('en');
@@ -26,12 +27,25 @@ describe('authErrorMessage', () => {
 			['ROUTE_NOT_FOUND', en.AUTH.SERVER_ERROR],
 			['INVALID_JSON', en.AUTH.SERVER_ERROR],
 			['PAYLOAD_TOO_LARGE', en.AUTH.SERVER_ERROR],
+			['EMAIL_INVALID', en.AUTH.EMAIL_INVALID],
+			['CREDENTIALS_REQUIRED', en.AUTH.SERVER_ERROR],
 		])('translates %s', (code, message) => {
 			// a 400 alone would show the server's text: the code decides
 			const error = new ApiError(400, 'whatever the server wrote', code);
 
 			expect(authErrorMessage(t, error)).toBe(message);
 		});
+
+		it.each(PASSWORD_RULES.map((rule) => rule.code))(
+			'translates %s, a password rule the page checks first',
+			(code) => {
+				// these come back only if the server's rules have changed since
+				// the app's copy (passwordRules.ts) was written
+				const error = new ApiError(400, 'Password must…', code);
+
+				expect(authErrorMessage(t, error)).toBe(en.AUTH.PASSWORD_RULES_UNMET);
+			}
+		);
 
 		it('reads the code before the status', () => {
 			// The backend never sends this pair; it pins the order, since

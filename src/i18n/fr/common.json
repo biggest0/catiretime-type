@@ -35,11 +35,28 @@
     "FORGOT_PASSWORD": "Mot de passe oublié ?",
     "NO_ACCOUNT": "Vous n'avez pas de compte ?",
     "REGISTER": "S'inscrire",
+    "CONFIRM_PASSWORD": "Confirmer le mot de passe",
+    "REGISTERING": "Inscription en cours...",
+    "HAS_ACCOUNT": "Vous avez déjà un compte ?",
     "NETWORK_ERROR": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
     "INVALID_CREDENTIALS": "Courriel ou mot de passe incorrect.",
     "EMAIL_IN_USE": "Un compte existe déjà avec ce courriel.",
     "RATE_LIMITED": "Trop de tentatives. Veuillez patienter quelques minutes.",
-    "SERVER_ERROR": "Une erreur s'est produite de notre côté. Veuillez réessayer."
+    "SERVER_ERROR": "Une erreur s'est produite de notre côté. Veuillez réessayer.",
+    "EMAIL_INVALID": "Saisissez une adresse courriel valide.",
+    "NEW_PASSWORD_REQUIRED": "Choisissez un mot de passe.",
+    "CONFIRM_PASSWORD_REQUIRED": "Saisissez de nouveau le même mot de passe.",
+    "PASSWORDS_MISMATCH": "Les mots de passe ne correspondent pas.",
+    "PASSWORD_RULES": "Votre mot de passe doit contenir :",
+    "PASSWORD_RULE_LENGTH": "Au moins {{min}} caractères",
+    "PASSWORD_RULE_UPPERCASE": "Une lettre majuscule (A–Z)",
+    "PASSWORD_RULE_LOWERCASE": "Une lettre minuscule (a–z)",
+    "PASSWORD_RULE_NUMBER": "Un chiffre (0–9)",
+    "PASSWORD_RULE_MET": "respecté",
+    "PASSWORD_RULE_NOT_MET": "pas encore respecté",
+    "PASSWORD_RULES_UNMET": "Votre mot de passe ne respecte pas toutes les règles.",
+    "VERIFY_EMAIL_SENT": "Nous avons envoyé un courriel de vérification à :",
+    "VERIFY_EMAIL_NEXT": "Cliquez sur le lien pour vérifier votre compte."
   },
   "FOOTER": {
     "BRAND_TAGLINE": "Exercices de dactylo par {{parentSite}}",
@@ -56,6 +73,10 @@
     },
     "LOGIN": {
       "TITLE": "Connexion"
+    },
+    "REGISTER": {
+      "TITLE": "Inscription",
+      "VERIFY_TITLE": "Vérifiez votre courriel"
     },
     "GOOGLE_CALLBACK": {
       "TITLE": "Connexion avec Google"
@@ -75,6 +96,9 @@
     },
     "LOGIN": {
       "TITLE": "Connexion"
+    },
+    "REGISTER": {
+      "TITLE": "Inscription"
     },
     "GOOGLE_CALLBACK": {
       "TITLE": "Connexion en cours"
